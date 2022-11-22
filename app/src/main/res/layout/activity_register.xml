@@ -24,22 +24,32 @@
         app:layout_constraintVertical_bias="0.497">
 
         <EditText
-            android:id="@+id/nickname"
+            android:id="@+id/ed_nickname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/input_bg"
+            android:drawableLeft="@drawable/ic_baseline_person_24"
             android:ems="10"
             android:hint="输入昵称"
+            android:inputType="textPersonName"
             android:lines="1"
-            android:inputType="textPersonName" />
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp" />
 
         <EditText
-            android:id="@+id/username"
+            android:id="@+id/ed_mobile"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:background="@drawable/input_bg"
+            android:drawableLeft="@drawable/ic_baseline_phone_android_24"
             android:hint="请输入手机号"
-            android:lines="1"
-            android:inputType="textPersonName" />
+            android:lines="1" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -124,23 +134,34 @@
         </LinearLayout>
 
         <EditText
-            android:id="@+id/password"
+            android:id="@+id/ed_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="请输入新密码"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
             android:lines="1"
+            android:background="@drawable/input_bg"
+            android:drawableLeft="@drawable/ic_baseline_security_24"
             android:inputType="textPersonName"
             android:minHeight="48dp" />
 
         <EditText
-            android:id="@+id/rpassword"
+            android:id="@+id/ed_rpassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="请再输入新密码"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:background="@drawable/input_bg"
+            android:drawableLeft="@drawable/ic_baseline_security_24"
             android:lines="1"
-            android:inputType="textPersonName"
             android:minHeight="48dp" />
     </LinearLayout>
 
@@ -149,26 +170,16 @@
         android:id="@+id/submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/btn_bg"
         android:text="提交"
-        android:background="@drawable/btn_bg"
+        android:layout_marginLeft="@dimen/spacing_small"
+        android:layout_marginRight="@dimen/spacing_small"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.783" />
-
-    <Button
-        android:id="@+id/btn_photo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="提交图片"
-        android:background="@drawable/btn_bg"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.937" />
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout3"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout3"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.team.jixiao;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -21,11 +22,26 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     List<Fragment> fragments;
     MenuItem menuItem;
+    int flag = 9;
+    private String imagePath = "";
+
+    private int role = -1;
+    private int staff_info_id = 0;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        role = getIntent().getIntExtra("role",-1);
+        staff_info_id = getIntent().getIntExtra("staff_info_id",0);
+        Log.e("Main_role:", String.valueOf(role));
+        Log.e("Main_staff_info_id:", String.valueOf(staff_info_id));
+//        imagePath = getIntent().getStringExtra("imagePath");
+//        if (imagePath!=null){
+//            Log.d("TAG", imagePath);
+//        }
         viewPager = findViewById(R.id.viewPager);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         fragments = new ArrayList<>();
@@ -36,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         myAdatpter adatpter = new myAdatpter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(adatpter);//viewPager添加数据
         //底部导航添加列表监听事件，通过底部导航监听事件改变viewpager页
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -56,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
                     default:
                         break;
                 }
-
                 return true;
             }
         });
@@ -66,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
-
             @Override
             public void onPageSelected(int position) {
                 if (menuItem == null) {
@@ -109,4 +122,20 @@ public class MainActivity extends AppCompatActivity {
     public String getTitles(){
         return "getTitle111";
     }
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
+    }
+
+    public int getStaff_info_id() {
+        return staff_info_id;
+    }
+
+    public void setStaff_info_id(int staff_info_id) {
+        this.staff_info_id = staff_info_id;
+    }
+
 }

@@ -208,8 +208,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="上班打卡"
-            android:textSize="@dimen/font_normal"
             android:textColor="@color/white"
+            android:textSize="@dimen/font_normal"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/imageBtn_sign"
             app:layout_constraintEnd_toEndOf="@+id/imageBtn_sign"
@@ -220,6 +220,7 @@
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="时间"
             android:textColor="@color/white"
             android:textSize="@dimen/font_normal"
@@ -228,7 +229,7 @@
             app:layout_constraintEnd_toEndOf="@+id/imageBtn_sign"
             app:layout_constraintStart_toStartOf="@+id/imageBtn_sign"
             app:layout_constraintTop_toTopOf="@+id/imageBtn_sign"
-            app:layout_constraintVertical_bias="0.729" />
+            app:layout_constraintVertical_bias="0.609" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

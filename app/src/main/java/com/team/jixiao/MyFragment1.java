@@ -1,8 +1,12 @@
 package com.team.jixiao;
 
+import static android.os.Looper.getMainLooper;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,29 +17,70 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class MyFragment1 extends Fragment {
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.team.jixiao.Entity.StuffInfo;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+public class MyFragment1 extends Fragment implements View.OnClickListener {
+    LinearLayout InStuff,EMap;
     Intent intent;
-    @Override
+    int role = -1;
+    int staff_info_id = 0;
+
+
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d("TAG", "onAttach is invoke");
-        String titles = ((MainActivity) context).getTitles();//通过强转成宿主activity，就可以获取到传递过来的数据
-        Log.d("TAG", "onAttach is invoke context "+titles);
-        String titles1 = ((MainActivity)getActivity()).getTitles();
-        Log.d("TAG", "onAttach is invoke getActivity "+titles1);
+        role = ((MainActivity) context).getRole();
+        staff_info_id = ((MainActivity) context).getStaff_info_id();
+        Log.e("MyFragment1_role", String.valueOf(role));
+        Log.e("MyFragment1_staff_info_id", String.valueOf(staff_info_id));
+
     }
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.layout1,container,false);
+
+        InStuff = view.findViewById(R.id.InStuff);
+        EMap = view.findViewById(R.id.EMap);
+        if (role!=0){
+            InStuff.setVisibility(View.INVISIBLE);
+            EMap.setVisibility(View.INVISIBLE);
+        }
+        InStuff.setOnClickListener(this);
         return view;
 }
+
+    @Override
+    public void onClick(View v) {
+        intent = new Intent(getActivity(),StuffInfoActivity.class);
+        intent.putExtra("role",role);
+        intent.putExtra("staff_info_id",staff_info_id);
+        startActivity(intent);
+    }
 
 }

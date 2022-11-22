@@ -20,7 +20,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
@@ -51,6 +50,12 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class RegisterActivity extends AppCompatActivity {
+
+    private int role = -1;
+    private int staff_info_id = 0;
+
+    private Intent intent;
+
     EditText username, password, rpasswrod, nickname;
     Button submit;
     Spinner spinner_sex, spinner_job;
@@ -91,7 +96,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private Gson gson = new Gson();
 
-    private Button btn_photo;
     String imageUrl = null;
 
     int num_code = 0;
@@ -101,7 +105,10 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
+        role = getIntent().getIntExtra("role",-1);
+        staff_info_id = getIntent().getIntExtra("staff_info_id",0);
+        Log.e("RegisterActivity_role:", String.valueOf(role));
+        Log.e("RegisterActivity_staff_info_id:", String.valueOf(staff_info_id));
         init();
 
         spinner_sex.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -157,18 +164,13 @@ public class RegisterActivity extends AppCompatActivity {
                 } else {
 //                    showRequest(un,pw,sex,job,imagePath);
                     switch (job) {
-//                        case "开发岗":
-//                            P_id = 1;
-//                            break;
-//                        case "技术岗":
-//                            P_id = 2;
-//                            break;
-//                        case "美工岗":
-//                            P_id = 3;
-//                            break;
-//                        case "售后岗":
-//                            P_id = 4;
-//                            break;
+                        case "门店人员":
+                            P_id = 1;
+                            break;
+                        case "递推人员":
+                            P_id = 2;
+                        default:
+                            break;
                     }
                     postRequest(un, pw, sex, job, nname, P_id);
                 }
@@ -189,12 +191,11 @@ public class RegisterActivity extends AppCompatActivity {
     private void postRequest(String username, String password, String sex, String job, String nname, int P_id) {
         OkHttpClient client = new OkHttpClient();
         FormBody body = new FormBody.Builder()
-                .add("username", username)
-                .add("pwd", password)
                 .add("sex", sex)
-                .add("job", job)
+                .add("username", username)
+                .add("password", password)
                 .add("nickname", nname)
-                .add("ID", String.valueOf(P_id))
+                .add("role", String.valueOf(P_id))
                 .build();
         Request request = new Request.Builder()
                 .url(Constant.WEB_SITE + Constant.REGISTER)
@@ -216,7 +217,9 @@ public class RegisterActivity extends AppCompatActivity {
                 if (num_msg.equals("用户已存在")){
                     Log.d("TAG01", "用户已存在！");
                 }else {
-                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                    startActivity(new Intent(RegisterActivity.this, StuffInfoActivity.class));
+                    intent.putExtra("role",role);
+                    intent.putExtra("staff_info_id",staff_info_id);
                     finish();
                 }
             }
@@ -224,13 +227,11 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-
-
     void init() {
-        username = findViewById(R.id.username);
-        password = findViewById(R.id.password);
-        rpasswrod = findViewById(R.id.rpassword);
-        nickname = findViewById(R.id.nickname);
+        username = findViewById(R.id.ed_mobile);
+        password = findViewById(R.id.ed_password);
+        rpasswrod = findViewById(R.id.ed_rpassword);
+        nickname = findViewById(R.id.ed_nickname);
         submit = findViewById(R.id.submit);
 
         spinner_job = findViewById(R.id.spinner_job);
@@ -240,110 +241,86 @@ public class RegisterActivity extends AppCompatActivity {
 
         mainHandler = new Handler(getMainLooper());
 
-        //检查版本
-        checkVersion();
-        //取出缓存
-        imageUrl = SPUtils.getString("imageUrl",null,this);
 
 //        if(imageUrl != null){
 //            Glide.with(this).load(imageUrl).apply(requestOptions).into(ivHead);
 //        }
-        btn_photo = findViewById(R.id.btn_photo);
+//        btn_photo = findViewById(R.id.btn_photo);
         if (imagePath == null){
             imagePath = imageUrl;
         }
-        btn_photo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Log.e("转换", GetImageStr(imageUrl));
-//                    PostPhoto(GetImageStr(imageUrl));
-
-                Log.e("imagePath", "----------------------------"+imagePath);
-                uploadImage(imagePath);
-            }
-        });
+//        btn_photo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                Log.e("转换", GetImageStr(imageUrl));
+////                    PostPhoto(GetImageStr(imageUrl));
+//
+//                Log.e("imagePath", "----------------------------"+imagePath);
+//                uploadImage(imagePath);
+//            }
+//        });
 
     }
     /**
      * 检查版本
      */
-    private void checkVersion() {
-        //Android6.0及以上版本
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            //如果你是在Fragment中，则把this换成getActivity()
-            rxPermissions = new RxPermissions(this);
-            //权限请求
-            rxPermissions.request(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    .subscribe(granted -> {
-                        if (granted) {//申请成功
-                            CommonUtils.showShortMsg(RegisterActivity.this,"已获取权限");
-                            hasPermissions = true;
-                        } else {//申请失败
-                            CommonUtils.showShortMsg(RegisterActivity.this,"权限未开启");
-                            hasPermissions = false;
-                        }
-                    });
-        } else {
-            //Android6.0以下
-            CommonUtils.showShortMsg(RegisterActivity.this,"无需请求动态权限");
-        }
-    }
 
-    public void changeAvatar(View view) {
-        bottomSheetDialog = new BottomSheetDialog(this);
-        bottomView = getLayoutInflater().inflate(R.layout.dialog_bottom, null);
-        bottomSheetDialog.setContentView(bottomView);
-//        bottomSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundColor(Color.TRANSPARENT);
-        bottomSheetDialog.show();
-        TextView tvTakePictures = bottomView.findViewById(R.id.tv_take_pictures);
-        TextView tvOpenAlbum = bottomView.findViewById(R.id.tv_open_album);
-        TextView tvCancel = bottomView.findViewById(R.id.tv_cancel);
 
-        //拍照
-        tvTakePictures.setOnClickListener(v -> {
-            takePhoto();
-            CommonUtils.showShortMsg(RegisterActivity.this,"拍照");
-            bottomSheetDialog.cancel();
-        });
-        //打开相册
-        tvOpenAlbum.setOnClickListener(v -> {
-            openAlbum();
-            CommonUtils.showShortMsg(RegisterActivity.this,"打开相册");
-            bottomSheetDialog.cancel();
-        });
-        //取消
-        tvCancel.setOnClickListener(v -> {
-            bottomSheetDialog.cancel();
-        });
-        //底部弹窗显示
-        bottomSheetDialog.show();
-    }
+//    public void changeAvatar(View view) {
+//        bottomSheetDialog = new BottomSheetDialog(this);
+//        bottomView = getLayoutInflater().inflate(R.layout.dialog_bottom, null);
+//        bottomSheetDialog.setContentView(bottomView);
+////        bottomSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundColor(Color.TRANSPARENT);
+//        bottomSheetDialog.show();
+//        TextView tvTakePictures = bottomView.findViewById(R.id.tv_take_pictures);
+//        TextView tvOpenAlbum = bottomView.findViewById(R.id.tv_open_album);
+//        TextView tvCancel = bottomView.findViewById(R.id.tv_cancel);
+//
+//        //拍照
+//        tvTakePictures.setOnClickListener(v -> {
+//            takePhoto();
+//            CommonUtils.showShortMsg(RegisterActivity.this,"拍照");
+//            bottomSheetDialog.cancel();
+//        });
+//        //打开相册
+//        tvOpenAlbum.setOnClickListener(v -> {
+//            openAlbum();
+//            CommonUtils.showShortMsg(RegisterActivity.this,"打开相册");
+//            bottomSheetDialog.cancel();
+//        });
+//        //取消
+//        tvCancel.setOnClickListener(v -> {
+//            bottomSheetDialog.cancel();
+//        });
+//        //底部弹窗显示
+//        bottomSheetDialog.show();
+//    }
 
-    private void takePhoto() {
-        if (!hasPermissions) {
-            CommonUtils.showShortMsg(RegisterActivity.this,"未获取到权限");
-            checkVersion();
-            return;
-        }
-        SimpleDateFormat timeStampFormat = new SimpleDateFormat(
-                "yyyy_MM_dd_HH_mm_ss");
-        String filename = timeStampFormat.format(new Date());
-        Log.e("filename", filename);
-        outputImagePath = new File(getExternalCacheDir(),
-                filename + ".jpg");
-        Log.e("拍照获取", String.valueOf(outputImagePath));
-        Intent takePhotoIntent = CameraUtils.getTakePhotoIntent(this, outputImagePath);
-        // 开启一个带有返回值的Activity，请求码为TAKE_PHOTO
-        startActivityForResult(takePhotoIntent, TAKE_PHOTO);
-    }
-    private void openAlbum() {
-        if (!hasPermissions) {
-            CommonUtils.showShortMsg(RegisterActivity.this,"未获取到权限");
-            checkVersion();
-            return;
-        }
-        startActivityForResult(CameraUtils.getSelectPhotoIntent(), SELECT_PHOTO);
-    }
+//    private void takePhoto() {
+//        if (!hasPermissions) {
+//            CommonUtils.showShortMsg(RegisterActivity.this,"未获取到权限");
+//            checkVersion();
+//            return;
+//        }
+//        SimpleDateFormat timeStampFormat = new SimpleDateFormat(
+//                "yyyy_MM_dd_HH_mm_ss");
+//        String filename = timeStampFormat.format(new Date());
+//        Log.e("filename", filename);
+//        outputImagePath = new File(getExternalCacheDir(),
+//                filename + ".jpg");
+//        Log.e("拍照获取", String.valueOf(outputImagePath));
+//        Intent takePhotoIntent = CameraUtils.getTakePhotoIntent(this, outputImagePath);
+//        // 开启一个带有返回值的Activity，请求码为TAKE_PHOTO
+//        startActivityForResult(takePhotoIntent, TAKE_PHOTO);
+//    }
+//    private void openAlbum() {
+//        if (!hasPermissions) {
+//            CommonUtils.showShortMsg(RegisterActivity.this,"未获取到权限");
+//            checkVersion();
+//            return;
+//        }
+//        startActivityForResult(CameraUtils.getSelectPhotoIntent(), SELECT_PHOTO);
+//    }
     /**
      * 返回到Activity
      * @param requestCode
@@ -469,19 +446,19 @@ public class RegisterActivity extends AppCompatActivity {
 //    public static String GetImageStr(String filePath) {//将图片文件转化为字节数组字符串，并对其进行Base64编码处理
 //        String imgFile = filePath;//待处理的图片
 //        InputStream in = null;
-//        byte[] data = null;
+//        byte[] Data = null;
 //        //读取图片字节数组
 //        try {
 //            in = new FileInputStream(imgFile);
-//            data = new byte[in.available()];
-//            in.read(data);
+//            Data = new byte[in.available()];
+//            in.read(Data);
 //            in.close();
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
 //        //对字节数组Base64编码
 //        BASE64Encoder encoder = new BASE64Encoder();
-//        return encoder.encode(data);//返回Base64编码过的字节数组字符串
+//        return encoder.encode(Data);//返回Base64编码过的字节数组字符串
 //    }
 
 }

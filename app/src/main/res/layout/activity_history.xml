@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="姓名"
-                    android:textSize="@dimen/font_large"
+                    android:textSize="@dimen/font_normal"
                     android:textStyle="bold" />
 
                 <TextView
@@ -84,8 +84,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="上班时间"
-                    android:textSize="@dimen/font_large"
+                    android:text="上班"
+                    android:textSize="@dimen/font_normal"
                     android:textStyle="bold" />
 
                 <TextView
@@ -93,8 +93,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="下班时间"
-                    android:textSize="@dimen/font_large"
+                    android:text="下班"
+                    android:textSize="@dimen/font_normal"
                     android:textStyle="bold" />
             </LinearLayout>
 

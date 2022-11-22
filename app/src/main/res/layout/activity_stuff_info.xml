@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/list_greg"
     android:orientation="vertical"
+    android:background="@drawable/bg"
     tools:context=".StuffInfoActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,25 +34,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.002" />
 
-        <TextView
-            android:id="@+id/title_name"
-            android:layout_width="wrap_content"
-            android:layout_height="100px"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:gravity="center"
-            android:text="标题名"
-            android:textColor="#d93a49"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView9"
-            app:layout_constraintVertical_bias="0.012" />
-
         <ImageButton
-            android:id="@+id/btn_content_add"
+            android:id="@+id/btn_stuff_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -69,7 +52,7 @@
             android:id="@+id/textView9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="内　容　区"
+            android:text="员 工 名 单"
             android:textColor="#d93a49"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -84,18 +67,18 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ListView
-        android:id="@+id/lv_content"
-        android:scrollbars="none"
+        android:id="@+id/lv_stuff"
         android:layout_width="match_parent"
-        android:layout_height="651dp"
+        android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginRight="@dimen/spacing_biger"
         android:layout_marginLeft="@dimen/spacing_biger"
+        android:layout_marginRight="@dimen/spacing_biger"
         android:background="#EDF1F4"
         android:divider="@null"
         android:dividerHeight="10dp"
         android:paddingTop="10dp"
+        android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
