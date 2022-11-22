@@ -51,9 +51,6 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
         Log.e("MyFragment1_staff_info_id", String.valueOf(staff_info_id));
 
     }
-
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
