@@ -3,6 +3,7 @@ package com.team.jixiao.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,11 +39,13 @@ public class LvStuffInfoAdapter extends BaseAdapter {
 
     @Override
     public StuffInfo getItem(int position) {
+        Log.e("getItem: ", String.valueOf(position));
         return list.get(position);
     }
 
     @Override
     public long getItemId(int position) {
+        Log.e("getItemId: ", String.valueOf(position));
         return position;
     }
 
@@ -62,6 +65,7 @@ public class LvStuffInfoAdapter extends BaseAdapter {
         }else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+        Log.e("getView: ", String.valueOf(position));
         StuffInfo item = list.get(position);
         viewHolder.tv_username.setText(item.getNickname());
         viewHolder.tv_role.setText(item.getRole());

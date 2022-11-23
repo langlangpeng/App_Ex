@@ -9,7 +9,7 @@
     android:paddingBottom="10dp">
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/tv_name"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -17,7 +17,7 @@
         android:text="姓名" />
 
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/tv_online"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -26,7 +26,7 @@
         android:text="上班时间" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/tv_offline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"

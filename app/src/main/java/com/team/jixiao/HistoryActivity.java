@@ -15,7 +15,10 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.team.jixiao.Adapter.LvDataSignAdapter;
+import com.team.jixiao.Adapter.LvStuffInfoAdapter;
 import com.team.jixiao.Entity.DataSign;
+import com.team.jixiao.Entity.StuffInfo;
 import com.team.jixiao.utils.Constant;
 
 import org.json.JSONArray;
@@ -50,22 +53,29 @@ public class HistoryActivity extends AppCompatActivity {
 
     private Handler mainHandler;
 
-    DataSign dataSign = new DataSign();
+    List<DataSign> list = new ArrayList<>();
+
+    private LvDataSignAdapter lvDataSignAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         ButterKnife.bind(this);
-        mainHandler = new Handler(getMainLooper());
-        getRequest();
-        mainHandler = new MainHandler();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         strTime = format.format(calendarView.getDate());
+        mainHandler = new Handler(getMainLooper());
+        lvDataSignAdapter = new LvDataSignAdapter(this,list);
+        lv_history.setAdapter(lvDataSignAdapter);
+
+        mainHandler = new MainHandler();
+
+        getRequest();
 
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 strTime = year+"-"+(month+1)+"-"+dayOfMonth;
+                getRequest();
                 Log.e("TAG", "onSelectedDayChange: "+strTime);
             }
         });
@@ -142,61 +152,45 @@ public class HistoryActivity extends AppCompatActivity {
                     if (msg.obj != null) {
                         String json = (String) msg.obj;
                         Log.e("json:", json);
+
                         try {
                             JSONObject jsonObject = new JSONObject(json);
                             Log.e("json_jsonObject:", String.valueOf(jsonObject));
-
+                            Log.e("json_jsonObject:", "--------------------------------------------------");
                             JSONArray data = jsonObject.optJSONArray("data");
                             Log.e("json_data:", String.valueOf(data));
 
+                            list = gson.fromJson(String.valueOf(data), new TypeToken<List<DataSign>>(){}.getType());
+
+                            for (DataSign d : list){
+                                Log.e("TAG", d.getNickname() );
+                            }
+
                             for (int i = 0; i < data.length(); i++) {
                                 String info = data.optString(i);
-                                Log.e("data", info);
                                 JSONObject jsonObject1 = new JSONObject(info);
                                 Log.e("json_jsonObject1:", String.valueOf(jsonObject1));
                                 String nickname = jsonObject1.optString("nickname");
+                                Log.e("data1", "-------------------------------------------------------------");
                                 Log.e("data1", nickname);
-//                                for (int j = 0; j < info.length(); j++) {
-//                                    Log.e("info", info);
+                                JSONArray jsonArray = jsonObject1.optJSONArray("clock_Recording");
+                                Log.e("jsonArray:", String.valueOf(jsonArray));
 
-//                                    Log.e("json_data1:", String.valueOf(data1));
-//                                    JSONObject jsonObject2 = new JSONObject(info);
-//                                    JSONObject nickname = jsonObject2.optJSONObject("nickname");
-//                                    Log.e("nickname", String.valueOf(nickname));
-//                                }
+                                for (int j = 0;j<jsonArray.length();j++){
+                                    JSONObject jsonObject2 = jsonArray.optJSONObject(j);
+                                    if (jsonObject2 != null){
+                                        int sign = jsonObject2.optInt("sign");
+                                        String add_time = jsonObject2.optString("add_time");
+                                        String type = jsonObject2.optString("type");
+                                        Log.e("TAG", String.valueOf(sign)+","+add_time+","+type);
+                                    }
+                                }
                             }
-//                            dataSign.setNickname(nickname);
-//                            List<DataSign.Clock_Recording> list = new ArrayList<>();
-//                            dataSign.setClock_Recording(list);
-//
-//                            for (int i = 0; i < clock_Recording.length(); i++) {
-//                                JSONObject jsonObject1 = clock_Recording.optJSONObject(i);
-//                                if (jsonObject1 != null){
-//                                    int sign = jsonObject1.optInt("sign");
-//                                    String add_time = jsonObject1.optString("add_time");
-//                                    String type = jsonObject1.optString("type");
-//                                    DataSign.Clock_Recording bean = new DataSign.Clock_Recording();
-
-//                                    int id = jsonObject1.optInt("id");
-//                                    String title = jsonObject1.optString("title");
-
-//                                    bean.setSign(sign);
-//                                    bean.setAdd_time(add_time);
-//                                    bean.setType(type);
-//                                    list.add(bean);
-
-//                                    //javabean
-//                                    DataInfo.DataBean.ItemsBean bean = new DataInfo.DataBean.ItemsBean();
-//                                    bean.setId(id);
-//                                    bean.setTitle(title);
-//                                    itemBean.add(bean);
-//                                }
-//                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        lvDataSignAdapter.setData(list);
                     }
-                    Log.e("TAG", dataSign.toString() );
                     break;
             }
         }
