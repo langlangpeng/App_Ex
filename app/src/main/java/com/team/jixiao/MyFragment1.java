@@ -37,7 +37,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class MyFragment1 extends Fragment implements View.OnClickListener {
-    LinearLayout InStuff,EMap;
+    LinearLayout InStuff,EMap,business_check;
     Intent intent;
     int role = -1;
     int staff_info_id = 0;
@@ -49,8 +49,10 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
         staff_info_id = ((MainActivity) context).getStaff_info_id();
         Log.e("MyFragment1_role", String.valueOf(role));
         Log.e("MyFragment1_staff_info_id", String.valueOf(staff_info_id));
-
     }
+
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,20 +66,34 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
 
         InStuff = view.findViewById(R.id.InStuff);
         EMap = view.findViewById(R.id.EMap);
+        business_check = view.findViewById(R.id.business_check);
+
         if (role!=0){
             InStuff.setVisibility(View.INVISIBLE);
             EMap.setVisibility(View.INVISIBLE);
         }
         InStuff.setOnClickListener(this);
+        business_check.setOnClickListener(this);
         return view;
 }
 
     @Override
     public void onClick(View v) {
-        intent = new Intent(getActivity(),StuffInfoActivity.class);
-        intent.putExtra("role",role);
-        intent.putExtra("staff_info_id",staff_info_id);
-        startActivity(intent);
+        switch (v.getId()){
+            case R.id.InStuff:
+                intent = new Intent(getActivity(),StuffInfoActivity.class);
+                intent.putExtra("role",role);
+                intent.putExtra("staff_info_id",staff_info_id);
+                startActivity(intent);
+                break;
+            case R.id.business_check:
+                intent = new Intent(getActivity(),BusinessCheckActivity.class);
+                intent.putExtra("role",role);
+                intent.putExtra("staff_info_id",staff_info_id);
+                startActivity(intent);
+                break;
+        }
+
     }
 
 }

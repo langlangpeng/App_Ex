@@ -13,14 +13,16 @@
         <selector xmlns:android="http://schemas.android.com/apk/res/android">
             <item android:state_pressed="true">
                 <shape android:shape="oval" >
-                    <solid android:color="#33a3dc" />
+
+                    <solid android:color="#e66b4f" />
                     <size android:width="162dp" android:height="162dp"/>
                 </shape>
             </item>
 
             <item>
                 <shape android:shape="oval" >
-                    <solid android:color="#e66b4f" />
+
+                    <solid android:color="#33a3dc" />
                     <size android:width="162dp" android:height="162dp"/>
                 </shape>
             </item>

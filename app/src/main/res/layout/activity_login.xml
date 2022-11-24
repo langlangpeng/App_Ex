@@ -36,7 +36,7 @@
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
-        android:text="admin"
+        android:text="18971675059"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -59,7 +59,7 @@
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
-        android:text="123456"
+        android:text="111111"
         app:layout_constraintEnd_toEndOf="@+id/ed_mobile"
         app:layout_constraintStart_toStartOf="@+id/ed_mobile"
         app:layout_constraintTop_toBottomOf="@+id/ed_mobile" />

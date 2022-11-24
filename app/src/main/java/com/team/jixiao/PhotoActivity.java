@@ -14,28 +14,37 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.gson.reflect.TypeToken;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.team.jixiao.Entity.Detail_Merchant;
 import com.team.jixiao.utils.BitmapUtils;
 import com.team.jixiao.utils.CameraUtils;
 import com.team.jixiao.utils.CommonUtils;
 
 import com.team.jixiao.utils.SPUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -54,18 +63,10 @@ public class PhotoActivity extends AppCompatActivity {
 
     private String imagePath;
 
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
     private File outputImagePath;
 
     Intent intent;
-
+    private Handler mainHandler;
     File file;
     String imageUrl = null;
     //Base64
@@ -79,24 +80,45 @@ public class PhotoActivity extends AppCompatActivity {
             .skipMemoryCache(true);//不做内存缓存
 
     private ImageView pic;
+
+    private double Latitude = 0;
+    private double Longitude = 0;
+    private int staff_info_id = 0;
+    private int role = -1;
+    private int sign = 0;
+    String Address = "无";//地址
+    String res = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
+        Latitude = getIntent().getDoubleExtra("Latitude",0);
+        Longitude = getIntent().getDoubleExtra("Longitude",0);
+        staff_info_id = getIntent().getIntExtra("staff_info_id",0);
+        role = getIntent().getIntExtra("role",-1);
+        Address = getIntent().getStringExtra("Address");
+        sign = getIntent().getIntExtra("sign",0);
+        Log.e("Latitude", String.valueOf(Latitude));
+        Log.e("Longitude", String.valueOf(Longitude));
+        Log.e("staff_info_id", String.valueOf(staff_info_id));
+        Log.e("role", String.valueOf(role));
+        Log.e("Address", Address );
+        Log.e("sign", String.valueOf(sign));
+        if (sign==0){
+            sign=1;
+        }else if (sign==1){
+            sign=2;
+        }
+        mainHandler = new Handler(getMainLooper());
         pic = findViewById(R.id.pic);
-        if(imageUrl != null){
-            Glide.with(this).load(imageUrl).apply(requestOptions).into(pic);
-        }
-        if (imagePath == null){
-            imagePath = imageUrl;
-        }
+        //检查版本
         checkVersion();
+        //取出缓存
+        imageUrl = SPUtils.getString("imageUrl",null,this);
         takePhoto();
-//        Log.e("获取路径", imagePath);
-//        intent = new Intent(PhotoActivity.this,MainActivity.class);
-//        intent.putExtra("flag",1);
-//        startActivity(intent);
-//        PhotoActivity.this.finish();
+
+
+//        mainHandler = new MainHandler();
     }
     private void checkVersion() {
         //Android6.0及以上版本
@@ -121,43 +143,6 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
 
-    private void takePhoto() {
-        if (!hasPermissions) {
-            CommonUtils.showShortMsg(PhotoActivity.this,"未获取到权限");
-            checkVersion();
-            return;
-        }
-        SimpleDateFormat timeStampFormat = new SimpleDateFormat(
-                "yyyy_MM_dd_HH_mm_ss");
-        String filename = timeStampFormat.format(new Date());
-        Log.e("filename", filename);
-        outputImagePath = new File(getExternalCacheDir(), filename + ".jpg");
-        Log.e("存储路径", String.valueOf(outputImagePath));
-        Intent takePhotoIntent = CameraUtils.getTakePhotoIntent(this, outputImagePath);
-        // 开启一个带有返回值的Activity，请求码为TAKE_PHOTO
-        startActivityForResult(takePhotoIntent, TAKE_PHOTO);
-    }
-
-        @Override
-        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
-            switch (requestCode) {
-                //拍照后返回
-                case TAKE_PHOTO:
-                    if (resultCode == RESULT_OK) {
-                        imagePath = null;
-                        //显示图片 1
-                        imagePath = outputImagePath.getAbsolutePath();
-                        displayImage(imagePath);
-                        Log.e("拍照显示图片", imagePath);
-                    }
-//                    intent = new Intent(PhotoActivity.this,MainActivity.class);
-//                    startActivity(intent);
-                    break;
-
-            }
-            uploadImage(imagePath);
-        }
     public void uploadImage(String imagePath){
         Log.d("uploadImage", imagePath);
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -168,7 +153,7 @@ public class PhotoActivity extends AppCompatActivity {
                 .addFormDataPart("file", imagePath, image)
                 .build();
         Request request = new Request.Builder()
-                .url("http://192.168.1.108:8092/Loader/imagesUp.ashx")
+                .url("http://47.92.214.113:8092/Loader/imagesUp.ashx")
                 .post(requestBody)
                 .build();
         Call call = okHttpClient.newCall(request);
@@ -179,9 +164,16 @@ public class PhotoActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response){
-                String res = response.toString().trim();
-                Log.e("uploadImage——image", res);
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                res = response.body().string();
+                Log.e("res",res );
+                upsign();
+                ///images/2022-11-24/bank9643488.jpg
+//                Message msg = new Message();
+//                Log.e("uploadImage——image", res);
+//                msg.what = 1;
+//                msg.obj = res;
+//                mainHandler.sendMessage(msg);
             }
         });
     }
@@ -212,59 +204,86 @@ public class PhotoActivity extends AppCompatActivity {
         } else {
             CommonUtils.showShortMsg(PhotoActivity.this,"图片获取失败");
         }
+
     }
-    public static String getTakePhotoPath(Intent data) {
-        Bitmap photo = null;
-        Uri uri = data.getData();
-        if (uri != null) {
-            photo = BitmapFactory.decodeFile(uri.getPath());
+    private void takePhoto() {
+        if (!hasPermissions) {
+            CommonUtils.showShortMsg(PhotoActivity.this,"未获取到权限");
+            checkVersion();
+            return;
         }
-        if (photo == null) {
-            Bundle bundle = data.getExtras();
-            if (bundle != null) {
-                photo = (Bitmap) bundle.get("data");
-            } else {
-
-                return "";
-            }
-        }
-
-        FileOutputStream fileOutputStream = null;
-        try {
-            // 获取 SD 卡根目录
-            String saveDir = Environment.getExternalStorageDirectory() + "/fiberstore_photos";
-            // 新建目录
-            File dir = new File(saveDir);
-            if (!dir.exists()) dir.mkdir();
-            // 生成文件名
-            SimpleDateFormat t = new SimpleDateFormat("xiebin");
-            String filename = "MT" + (t.format(new Date())) + ".jpg";
-            /**新建文件*/
-            File file = new File(saveDir, filename);
-            /***打开文件输出流*/
-            fileOutputStream = new FileOutputStream(file);
-            // 生成图片文件
-            /**
-             * 对应Bitmap的compress(Bitmap.CompressFormat format, int quality, OutputStream stream)方法中第一个参数。
-             * CompressFormat类是个枚举，有三个取值：JPEG、PNG和WEBP。其中，
-             * PNG是无损格式（忽略质量设置），会导致方法中的第二个参数压缩质量失效，
-             * JPEG不解释，
-             * 而WEBP格式是Google新推出的，据官方资料称“在质量相同的情况下，WEBP格式图像的体积要比JPEG格式图像小40%。
-             */
-            photo.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-            /***相片的完整路径*/
-            return file.getPath();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (fileOutputStream != null) {
-                try {
-                    fileOutputStream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+        SimpleDateFormat timeStampFormat = new SimpleDateFormat(
+                "yyyy_MM_dd_HH_mm_ss");
+        String filename = timeStampFormat.format(new Date());
+        Log.e("filename", filename);
+        outputImagePath = new File(getExternalCacheDir(),
+                filename + ".jpg");
+        Log.e("拍照获取", String.valueOf(outputImagePath));
+        Intent takePhotoIntent = CameraUtils.getTakePhotoIntent(this, outputImagePath);
+        // 开启一个带有返回值的Activity，请求码为TAKE_PHOTO
+        startActivityForResult(takePhotoIntent, TAKE_PHOTO);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            //拍照后返回
+            case TAKE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    imagePath = null;
+                    //显示图片 1
+                    imagePath = outputImagePath.getAbsolutePath();
+                    displayImage(outputImagePath.getAbsolutePath());
+                    Log.e("拍照显示图片", imagePath);
                 }
-            }
+//                    intent = new Intent(PhotoActivity.this,MainActivity.class);
+//                    startActivity(intent);
+                break;
+
         }
-        return "";
+        Toast.makeText(this, "图片上传中，请稍等！", Toast.LENGTH_SHORT).show();
+        uploadImage(imagePath);
+
+
+    }
+
+    private void upsign() {
+        OkHttpClient client = new OkHttpClient();
+
+        String s_Latitude = String.valueOf(Latitude);
+        String s_Longitude = String.valueOf(Longitude);
+        Log.e("s_Latitude", s_Latitude);
+
+        FormBody body = new FormBody.Builder()
+                .add("id", String.valueOf(staff_info_id))
+                .add("Latitude", s_Latitude)
+                .add("Longitude", s_Longitude)
+                .add("face_photo",res)
+                .add("Address",Address)
+                .add("sign", String.valueOf(sign))
+                .build();
+
+        Request request = new Request.Builder()
+                .url("http://47.92.214.113:8092/webapi/attendance/Add.ashx")
+                .post(body)
+                .build();
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e("TAG", "onFailure: " + e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                String res = response.body().string();//转字符串
+                Log.d("PhotoActivity_msg", "onResponse: "+res);
+                intent = new Intent(PhotoActivity.this,MainActivity.class);
+                intent.putExtra("role",role);
+                intent.putExtra("staff_info_id",staff_info_id);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 }

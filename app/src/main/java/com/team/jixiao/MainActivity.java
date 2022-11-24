@@ -1,5 +1,6 @@
 package com.team.jixiao;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -12,12 +13,16 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AMapLocationListener {
     ViewPager viewPager;
     BottomNavigationView bottomNavigationView;
     List<Fragment> fragments;
@@ -28,12 +33,40 @@ public class MainActivity extends AppCompatActivity {
     private int role = -1;
     private int staff_info_id = 0;
 
+    double Latitude = 0;//获取纬度
+    double Longitude = 0;//获取经度
+    String Address = "无";//地址
 
+    public double getLatitude() {
+        return Latitude;
+    }
 
+    public void setLatitude(double latitude) {
+        Latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return Longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        Longitude = longitude;
+    }
+
+    public String getAddress() {
+        return Address;
+    }
+
+    public void setAddress(String address) {
+        Address = address;
+    }
+
+    AMapLocationClient locationClient = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         role = getIntent().getIntExtra("role",-1);
         staff_info_id = getIntent().getIntExtra("staff_info_id",0);
         Log.e("Main_role:", String.valueOf(role));
@@ -42,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
 //        if (imagePath!=null){
 //            Log.d("TAG", imagePath);
 //        }
+        AMapLocationClient.updatePrivacyShow(this, true, true);
+        AMapLocationClient.updatePrivacyAgree(this, true);
+
         viewPager = findViewById(R.id.viewPager);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         fragments = new ArrayList<>();
@@ -51,6 +87,28 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(new MyFragment4());
         myAdatpter adatpter = new myAdatpter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(adatpter);//viewPager添加数据
+        try {
+            locationClient = new AMapLocationClient(this);
+            AMapLocationClientOption option = new AMapLocationClientOption();
+            /**
+             * 设置签到场景，相当于设置为：
+             * option.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+             * option.setOnceLocation(true);
+             * option.setOnceLocationLatest(true);
+             * option.setMockEnable(false);
+             * option.setWifiScan(true);
+             * option.setGpsFirst(false);
+             * 其他属性均为模式属性。
+             * 如果要改变其中的属性，请在在设置定位场景之后进行
+             */
+            option.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
+            locationClient.setLocationOption(option);
+            //设置定位监听
+            locationClient.setLocationListener(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        locationClient.startLocation();
         //底部导航添加列表监听事件，通过底部导航监听事件改变viewpager页
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -100,6 +158,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onLocationChanged(AMapLocation aMapLocation) {
+        if (aMapLocation.getErrorCode() == AMapLocation.LOCATION_SUCCESS) {
+            Latitude = aMapLocation.getLatitude();
+            Longitude = aMapLocation.getLongitude();
+            Address = aMapLocation.getAddress();
+
+//            Log.e("Latitude", String.valueOf(Latitude));
+//            Log.e("Longitude", String.valueOf(Longitude));
+//            Log.e("Address", Address);
+
+//            postRequest();
+//            tvResult.setText("签到成功，签到经纬度：(" + aMapLocation.getLatitude() + "," + aMapLocation.getLongitude() + ")");
+//            Log.e("TAG", "onLocationChanged: "+aMapLocation.getLatitude() + "," + aMapLocation.getLongitude() );
+//            Intent intent = new Intent(SignInActivity.this,MainActivity.class);
+//            intent.putExtra("user_id",user_id);
+//            intent.putExtra("position_id",position_id);
+//            startActivity(intent);
+        } else {
+            //可以记录错误信息，或者根据错误错提示用户进行操作，Demo中只是打印日志
+            Log.e("AMap", "签到定位失败，错误码：" + aMapLocation.getErrorCode() + ", " + aMapLocation.getLocationDetail());
+            //提示错误信息
+//            tvResult.setText("签到失败");
+        }
+    }
+
     private class myAdatpter extends FragmentPagerAdapter {
         private List<Fragment> fragments;
 
@@ -119,9 +203,6 @@ public class MainActivity extends AppCompatActivity {
             return fragments.size();
         }
     }
-    public String getTitles(){
-        return "getTitle111";
-    }
     public int getRole() {
         return role;
     }
@@ -137,5 +218,12 @@ public class MainActivity extends AppCompatActivity {
     public void setStaff_info_id(int staff_info_id) {
         this.staff_info_id = staff_info_id;
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //销毁时，需要销毁定位client
+        if (null != locationClient) {
+            locationClient.onDestroy();
+        }
+    }
 }

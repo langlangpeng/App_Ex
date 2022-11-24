@@ -136,9 +136,10 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/business_check"
                 android:layout_width="@dimen/mian_linear_table"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
+                android:visibility="visible"
                 android:orientation="vertical"
                 android:padding="10dp">
 
@@ -149,11 +150,10 @@
                     android:background="@drawable/ic_baseline_khsh_search_24" />
 
                 <TextView
-
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:text="客户审核"
+                    android:text="商户审核"
                     android:textSize="@dimen/font_small" />
             </LinearLayout>
 

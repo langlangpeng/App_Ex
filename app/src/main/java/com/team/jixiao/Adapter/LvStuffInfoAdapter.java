@@ -66,7 +66,9 @@ public class LvStuffInfoAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         Log.e("getView: ", String.valueOf(position));
+
         StuffInfo item = list.get(position);
+
         viewHolder.tv_username.setText(item.getNickname());
         viewHolder.tv_role.setText(item.getRole());
 
