@@ -49,8 +49,11 @@ public class BusinessInfoActivity extends AppCompatActivity {
     Gson gson = new Gson();
     DetailMerChartInfoAdapter detailMerChartInfoAdapter;
     private Handler mainHandler;
-    JSONArray array;
     JSONArray jsonArray;
+    int status = -1;
+
+    int role = -1;
+    int staff_info_id = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +65,13 @@ public class BusinessInfoActivity extends AppCompatActivity {
         ImgUrl = getIntent().getStringExtra("ImgUrl");
         Add_time = getIntent().getStringExtra("Add_time");
         ID = getIntent().getIntExtra("ID",-1);
+        status = getIntent().getIntExtra("status",-1);
+
+        role = getIntent().getIntExtra("role",-1);
+        staff_info_id = getIntent().getIntExtra("staff_info_id",0);
+        Log.e("BusinessInfoActivity_role", String.valueOf(role));
+        Log.e("BusinessInfoActivity_staff_info_id", String.valueOf(staff_info_id));
+
         Log.e("ID", String.valueOf(ID));
         initView();
         getRequest();
@@ -108,6 +118,12 @@ public class BusinessInfoActivity extends AppCompatActivity {
                 .load(ImgUrl)
                 .apply(requestOptions)
                 .into(iv_pic);
+        disableRadioGroup(radioGroup_check);
+        if (status == 0){
+            radioButton_yes.setChecked(true);
+        }else if (status == 1){
+            radioButton_no.setChecked(true);
+        }
     }
 
     private void getRequest() {
@@ -166,6 +182,11 @@ public class BusinessInfoActivity extends AppCompatActivity {
                     }
                     break;
             }
+        }
+    }
+    public static void disableRadioGroup(RadioGroup radioGroup) {
+        for (int i = 0; i < radioGroup.getChildCount(); i++) {
+            radioGroup.getChildAt(i).setEnabled(false);
         }
     }
 }

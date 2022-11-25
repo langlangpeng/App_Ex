@@ -91,6 +91,7 @@ public class BusinessCheckActivity extends AppCompatActivity {
         Log.e("BusinessCheckActivity_staff_info_id:", String.valueOf(staff_info_id));
 
         time = start_time + " 00:00 - "+ end_time +" 23:59";
+        Log.e("time", time );
         getRequest();
         mainHandler = new MainHandler();
     }
@@ -100,7 +101,7 @@ public class BusinessCheckActivity extends AppCompatActivity {
 
         FormBody body = new FormBody.Builder()
                 .add("id", String.valueOf(staff_info_id))
-                .add("date_time", "2020-11-23 00:00 - 2022-11-23 23:59")
+                .add("date_time", time)
                 .build();
 
         Request request = new Request.Builder()
@@ -143,13 +144,7 @@ public class BusinessCheckActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         list = gson.fromJson(String.valueOf(array), new TypeToken<List<Detail_Merchant>>(){}.getType());
-//                        for (StuffInfo data : list){
-//                            Log.e("TAG", data.getUsername() );
-//                            Log.e("TAG", data.getNickname() );
-//                            Log.e("TAG", data.getMobile() );
-//                            Log.e("TAG", data.getSex() );
-//                        }
-                        detailMerChartAdapter.setData(list);
+                        detailMerChartAdapter.setData(list,role,staff_info_id);
                     }
                     break;
             }
@@ -168,7 +163,9 @@ public class BusinessCheckActivity extends AppCompatActivity {
                             @Override
                             public void onTimeSelectChanged(Date date) {
                                 tv_start_time.setText(getTime(date));
+                                end_time = tv_end_time.getText().toString().trim();
                                 time = getTime(date) + " 00:00 - " + end_time+" 23:59";
+                                Log.e("time", time );
                                 getRequest();
                             }
                         })
@@ -190,7 +187,9 @@ public class BusinessCheckActivity extends AppCompatActivity {
                             @Override
                             public void onTimeSelectChanged(Date date) {
                                 tv_end_time.setText(getTime(date));
+                                start_time = tv_start_time.getText().toString().trim();
                                 time = start_time + " 00:00 - " + getTime(date)+" 23:59";
+                                Log.e("time", time );
                                 getRequest();
                             }
                         })

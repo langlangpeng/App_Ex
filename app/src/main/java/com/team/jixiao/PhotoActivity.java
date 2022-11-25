@@ -92,14 +92,16 @@ public class PhotoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
+
         Latitude = getIntent().getDoubleExtra("Latitude",0);
         Longitude = getIntent().getDoubleExtra("Longitude",0);
+
         staff_info_id = getIntent().getIntExtra("staff_info_id",0);
         role = getIntent().getIntExtra("role",-1);
         Address = getIntent().getStringExtra("Address");
         sign = getIntent().getIntExtra("sign",0);
-        Log.e("Latitude", String.valueOf(Latitude));
-        Log.e("Longitude", String.valueOf(Longitude));
+        Log.e("PhotoActivity_Latitude", String.valueOf(Latitude));
+        Log.e("PhotoActivity_Longitude", String.valueOf(Longitude));
         Log.e("staff_info_id", String.valueOf(staff_info_id));
         Log.e("role", String.valueOf(role));
         Log.e("Address", Address );
@@ -168,12 +170,6 @@ public class PhotoActivity extends AppCompatActivity {
                 res = response.body().string();
                 Log.e("res",res );
                 upsign();
-                ///images/2022-11-24/bank9643488.jpg
-//                Message msg = new Message();
-//                Log.e("uploadImage——image", res);
-//                msg.what = 1;
-//                msg.obj = res;
-//                mainHandler.sendMessage(msg);
             }
         });
     }

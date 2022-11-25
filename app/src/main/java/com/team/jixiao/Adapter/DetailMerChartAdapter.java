@@ -18,20 +18,25 @@ import com.team.jixiao.BusinessInfoActivity;
 import com.team.jixiao.Entity.Detail_Merchant;
 import com.team.jixiao.MapActivity;
 import com.team.jixiao.R;
+import com.team.jixiao.WaitForCheckActivity;
 
 import java.util.List;
 
 public class DetailMerChartAdapter extends BaseAdapter {
     private Context context;
     private List<Detail_Merchant> list;
-
+    private Intent intent;
+    int role = -1;
+    int staff_info_id =0;
     public DetailMerChartAdapter(Context context, List<Detail_Merchant> list) {
         this.context = context;
         this.list = list;
         notifyDataSetChanged();
     }
-    public void setData( List<Detail_Merchant> list){
+    public void setData(List<Detail_Merchant> list, int role, int staff_info_id){
         this.list = list;
+        this.role = role;
+        this.staff_info_id = staff_info_id;
 //        Log.e("DetailMerChartAdapter", "setData: "+list );
         notifyDataSetChanged();
     }
@@ -103,14 +108,35 @@ public class DetailMerChartAdapter extends BaseAdapter {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, BusinessInfoActivity.class);
-                    intent.putExtra("Mobile",item.getMobile());
-                    intent.putExtra("Merchant_Name",item.getMerchant_Name());
-                    intent.putExtra("Address",item.getAddress());
-                    intent.putExtra("ImgUrl",item.getUrl()+item.getFace_photo());
-                    intent.putExtra("Add_time",item.getAdd_time().substring(0,10));
-                    intent.putExtra("ID",item.getId());
-                    context.startActivity(intent);
+                    if (item.getStatus()==0){
+                        intent = new Intent(context, WaitForCheckActivity.class);
+                        intent.putExtra("Mobile",item.getMobile());
+                        intent.putExtra("Merchant_Name",item.getMerchant_Name());
+                        intent.putExtra("Address",item.getAddress());
+                        intent.putExtra("ImgUrl",item.getUrl()+item.getFace_photo());
+                        intent.putExtra("Add_time",item.getAdd_time().substring(0,10));
+                        intent.putExtra("ID",item.getId());
+                        intent.putExtra("status",item.getStatus());
+                        intent.putExtra("url",item.getUrl());
+                        intent.putExtra("face_photo",item.getFace_photo());
+                        intent.putExtra("role",role);
+                        intent.putExtra("staff_info_id",staff_info_id);
+                        context.startActivity(intent);
+                    }else if (item.getStatus()==1||item.getStatus()==2){
+                        intent = new Intent(context, BusinessInfoActivity.class);
+                        intent.putExtra("Mobile",item.getMobile());
+                        intent.putExtra("Merchant_Name",item.getMerchant_Name());
+                        intent.putExtra("Address",item.getAddress());
+                        intent.putExtra("ImgUrl",item.getUrl()+item.getFace_photo());
+                        intent.putExtra("Add_time",item.getAdd_time().substring(0,10));
+                        intent.putExtra("ID",item.getId());
+                        intent.putExtra("status",item.getStatus());
+                        intent.putExtra("url",item.getUrl());
+                        intent.putExtra("face_photo",item.getFace_photo());
+                        intent.putExtra("role",role);
+                        intent.putExtra("staff_info_id",staff_info_id);
+                        context.startActivity(intent);
+                    }
                 }
             });
         }else {

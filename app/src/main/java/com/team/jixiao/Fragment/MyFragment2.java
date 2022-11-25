@@ -161,7 +161,11 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
             e.printStackTrace();
         }
         locationClient.startLocation();
-        getRequest();
+
+        Log.e("F2_Latitude", String.valueOf(Latitude));
+        Log.e("F2_Longitude", String.valueOf(Longitude));
+
+//        getRequest();
 
         return view;
     }
@@ -174,6 +178,7 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId()){
             case R.id.imgbtn_history:
                 intent = new Intent(getActivity(), HistoryActivity.class);
@@ -202,7 +207,7 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
             Log.e("Latitude", String.valueOf(Latitude));
             Log.e("Longitude", String.valueOf(Longitude));
             Log.e("Address", Address);
-
+            getRequest();
         } else {
             Log.e("AMap", "签到定位失败，错误码：" + aMapLocation.getErrorCode() + ", " + aMapLocation.getLocationDetail());
 
@@ -294,6 +299,7 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
                             list = gson.fromJson(String.valueOf(array1), new TypeToken<List<Line>>(){}.getType());
                             for (Line line:list)
                             {
+                                tv_status2.setText(line.getType());
                                 Log.e("Sign", String.valueOf(line.getSign()));
                                 sign = line.getSign();
                                 if (sign==1){
@@ -309,11 +315,11 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
                             Boolean is_coordinate = jsonObject1.getBoolean("is_coordinate");
                             if (is_coordinate==true){
                                 tv_status.setText("不在上班区域！");
-                                tv_status2.setText("外勤");
+
                                 imageBtn_sign.setBackgroundResource(R.drawable.bg_special_disease_circle2);
                             }else{
                                 tv_status.setText("请认真上班哦！");
-                                tv_status2.setText("内勤");
+
                                 imageBtn_sign.setBackgroundResource(R.drawable.bg_special_disease_circle);
                             }
                             String info = jsonObject1.getString("info");

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".BusinessInfoActivity">
+    tools:context=".WaitForCheckActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
             android:background="#2a5caa"
             android:elevation="8dp"
             android:gravity="center"
-            android:text="认证商户"
+            android:text="待审核"
             android:textColor="@color/white"
             android:textSize="@dimen/font_large"
             android:translationZ="2dp" />
@@ -61,19 +61,14 @@
                 android:paddingRight="@dimen/spacing_big"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/tv_Mobile"
+                <EditText
+                    android:id="@+id/ed_Mobile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:paddingRight="@dimen/spacing_normal"
+                    android:background="@null"
                     android:text="手机"
                     android:textSize="@dimen/font_normal" />
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_call_24"
-                    android:background="@color/white"/>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -86,11 +81,13 @@
                 android:layout_width="200dp"
                 android:layout_weight="1"
                 android:orientation="horizontal"
-                android:layout_height="wrap_content">
+                android:layout_gravity="center"
+                android:layout_height="match_parent">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:paddingLeft="@dimen/spacing_normal"
                     android:text="商户名称"
                     android:textSize="@dimen/font_large"
@@ -104,10 +101,11 @@
                 android:paddingRight="@dimen/spacing_big"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/tv_Merchant_Name"
+                <EditText
+                    android:id="@+id/ed_Merchant_Name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@null"
                     android:text="名字"
                     android:textSize="@dimen/font_normal" />
             </LinearLayout>
@@ -143,12 +141,6 @@
                     android:orientation="horizontal">
 
                 </LinearLayout>
-                    <ImageButton
-                        android:background="@color/white"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:src="@drawable/ic_baseline_map_24"/>
 
             </LinearLayout>
 
@@ -161,12 +153,13 @@
                 android:orientation="horizontal"
                 android:paddingRight="@dimen/spacing_big">
 
-                <TextView
-                    android:id="@+id/tv_Address"
+                <EditText
+                    android:id="@+id/ed_Address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="地址"
+                    android:background="@null"
                     android:paddingRight="@dimen/spacing_normal"
+                    android:text="地址"
                     android:textSize="@dimen/font_normal" />
 
             </LinearLayout>
@@ -207,6 +200,7 @@
 
                 <ImageView
                     android:id="@+id/iv_pic"
+                    android:onClick="changeAvatar"
                     android:layout_width="200dp"
                     android:layout_height="200dp"
                     android:src="@drawable/logo"/>
@@ -306,37 +300,84 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#65c294"
-            android:orientation="horizontal">
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/font_normal"
+            android:paddingBottom="@dimen/font_normal">
 
-            <TextView
-                android:id="@+id/textView"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/spacing_big">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingLeft="@dimen/spacing_normal"
+                    android:text="原因说明"
+                    android:textSize="@dimen/font_large"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="内容" />
+                android:gravity="left"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/spacing_normal"
+                android:paddingRight="@dimen/spacing_big">
 
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="添加时间" />
+                <EditText
+                    android:id="@+id/ed_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="请在这里填写内容"
+                    android:paddingRight="@dimen/spacing_normal"
+                    android:textSize="@dimen/font_normal" />
+
+            </LinearLayout>
         </LinearLayout>
-
-        <ListView
-            android:id="@+id/lv_bi"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
     </LinearLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_normal"
+            android:background="@drawable/btn_bg_submit"
+            android:text="提　交"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.988" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </LinearLayout>
+
