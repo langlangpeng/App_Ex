@@ -1,4 +1,4 @@
-package com.team.jixiao;
+package com.team.jixiao.Fragment;
 
 import static android.app.Activity.RESULT_OK;
 import static android.os.Looper.getMainLooper;
@@ -34,6 +34,10 @@ import com.google.gson.reflect.TypeToken;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.team.jixiao.Entity.Detail_Merchant;
 import com.team.jixiao.Entity.Line;
+import com.team.jixiao.HistoryActivity;
+import com.team.jixiao.MainActivity;
+import com.team.jixiao.PhotoActivity;
+import com.team.jixiao.R;
 import com.team.jixiao.utils.CameraUtils;
 import com.team.jixiao.utils.CommonUtils;
 import com.team.jixiao.utils.Constant;
@@ -75,8 +79,6 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
 
     private Gson gson = new Gson();
     AMapLocationClient locationClient = null;
-
-    JSONArray array;
     String nickname = "";
     private Handler mainHandler;
 
@@ -84,7 +86,7 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
 
     TextView tv_position;
 
-    TextView tv_status;
+    TextView tv_status,tv_status2;
 
     TextView tv_distancen;
 
@@ -124,8 +126,11 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
         tv_name = view.findViewById(R.id.tv_name);
         tv_position = view.findViewById(R.id.tv_position);
         tv_status = view.findViewById(R.id.tv_status);
+        tv_status2 = view.findViewById(R.id.tv_status2);
         tv_distancen = view.findViewById(R.id.tv_distancen);
         tv_data = view.findViewById(R.id.tv_data);
+        tv_on = view.findViewById(R.id.tv_on);
+        tv_off = view.findViewById(R.id.tv_off);
         Log.e("getRequest!", "----------------------------------------------" );
         mainHandler = new MainHandler();
         SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
@@ -171,11 +176,11 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.imgbtn_history:
-                intent = new Intent(getActivity(),HistoryActivity.class);
+                intent = new Intent(getActivity(), HistoryActivity.class);
                 startActivity(intent);
                 break;
             case R.id.imageBtn_sign:
-                intent = new Intent(getActivity(),PhotoActivity.class);
+                intent = new Intent(getActivity(), PhotoActivity.class);
                 intent.putExtra("Latitude",Latitude);
                 intent.putExtra("Longitude",Longitude);
                 intent.putExtra("role",role);
@@ -238,11 +243,10 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
                 .add("id", String.valueOf(staff_info_id))
                 .add("Latitude", String.valueOf(Latitude))
                 .add("Longitude", String.valueOf(Longitude))
-
                 .build();
 
         Request request = new Request.Builder()
-                .url(Constant.WEB_SITE + "/webapi/attendance/select_byid.ashx")
+                .url(Constant.WEB_SITE + Constant.MY_LOCATION)
                 .post(body)
                 .build();
         Call call = client.newCall(request);
@@ -292,6 +296,10 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
                             {
                                 Log.e("Sign", String.valueOf(line.getSign()));
                                 sign = line.getSign();
+                                if (sign==1){
+                                    tv_on.setText(line.getAdd_time().substring(10,19));
+                                }
+                                tv_off.setText(line.getAdd_time().substring(10,19));
                             }
                             Log.e("sign状态", String.valueOf(sign));
 
@@ -300,10 +308,12 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
                             tv_distancen.setText(distancen);
                             Boolean is_coordinate = jsonObject1.getBoolean("is_coordinate");
                             if (is_coordinate==true){
-                                tv_status.setText("不在上班区域");
+                                tv_status.setText("不在上班区域！");
+                                tv_status2.setText("外勤");
                                 imageBtn_sign.setBackgroundResource(R.drawable.bg_special_disease_circle2);
                             }else{
                                 tv_status.setText("请认真上班哦！");
+                                tv_status2.setText("内勤");
                                 imageBtn_sign.setBackgroundResource(R.drawable.bg_special_disease_circle);
                             }
                             String info = jsonObject1.getString("info");

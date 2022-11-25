@@ -1,7 +1,5 @@
 package com.team.jixiao;
 
-import static com.team.jixiao.RegisterActivity.SELECT_PHOTO;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,6 +28,7 @@ import com.team.jixiao.utils.BitmapUtils;
 import com.team.jixiao.utils.CameraUtils;
 import com.team.jixiao.utils.CommonUtils;
 
+import com.team.jixiao.utils.Constant;
 import com.team.jixiao.utils.SPUtils;
 
 import org.json.JSONException;
@@ -51,6 +50,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
 
 public class PhotoActivity extends AppCompatActivity {
     private RxPermissions rxPermissions;
@@ -153,7 +153,7 @@ public class PhotoActivity extends AppCompatActivity {
                 .addFormDataPart("file", imagePath, image)
                 .build();
         Request request = new Request.Builder()
-                .url("http://47.92.214.113:8092/Loader/imagesUp.ashx")
+                .url(Constant.WEB_SITE+Constant.SIGN_PHOTO)
                 .post(requestBody)
                 .build();
         Call call = okHttpClient.newCall(request);
@@ -234,17 +234,15 @@ public class PhotoActivity extends AppCompatActivity {
                     //显示图片 1
                     imagePath = outputImagePath.getAbsolutePath();
                     displayImage(outputImagePath.getAbsolutePath());
-                    Log.e("拍照显示图片", imagePath);
+                    Log.e("显示路径", imagePath);
                 }
-//                    intent = new Intent(PhotoActivity.this,MainActivity.class);
-//                    startActivity(intent);
                 break;
 
         }
-        Toast.makeText(this, "图片上传中，请稍等！", Toast.LENGTH_SHORT).show();
+//        if (imagePath.isEmpty()){
+//            Toast.makeText(this, "图片上传失败，请检查手机权限是否开启", Toast.LENGTH_SHORT).show();
+//        }
         uploadImage(imagePath);
-
-
     }
 
     private void upsign() {
@@ -264,9 +262,10 @@ public class PhotoActivity extends AppCompatActivity {
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://47.92.214.113:8092/webapi/attendance/Add.ashx")
+                .url(Constant.WEB_SITE+Constant.SIGN_INFO)
                 .post(body)
                 .build();
+
         Call call = client.newCall(request);
         call.enqueue(new Callback() {
             @Override

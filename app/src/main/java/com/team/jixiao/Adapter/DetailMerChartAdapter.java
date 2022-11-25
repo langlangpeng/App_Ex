@@ -12,6 +12,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.team.jixiao.BusinessInfoActivity;
 import com.team.jixiao.Entity.Detail_Merchant;
 import com.team.jixiao.MapActivity;
 import com.team.jixiao.R;
@@ -68,7 +71,8 @@ public class DetailMerChartAdapter extends BaseAdapter {
 
             viewHolder.tv_Merchant_Name.setText(item.getMerchant_Name());
             viewHolder.tv_address.setText(item.getAddress());
-            viewHolder.tv_add_time.setText(item.getAdd_time());
+            viewHolder.tv_add_time.setText(item.getAdd_time().substring(0,10));
+
 
             viewHolder.imageButton_call.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -84,6 +88,28 @@ public class DetailMerChartAdapter extends BaseAdapter {
                     Intent intent = new Intent(context,MapActivity.class);
                     intent.putExtra("Latitude",item.getLatitude());
                     intent.putExtra("Longitude",item.getLongitude());
+                    context.startActivity(intent);
+                }
+            });
+            RequestOptions requestOptions = new RequestOptions()
+                    .placeholder(R.drawable.msb_default_person)
+                    .error(R.drawable.msb_default_person)
+                    .fallback(R.drawable.msb_default_person)
+                    .override(100,100); //override指定加载图片大小
+            Glide.with(context)
+                    .load(item.getUrl()+item.getFace_photo())
+                    .apply(requestOptions)
+                    .into(viewHolder.iv_icon);
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, BusinessInfoActivity.class);
+                    intent.putExtra("Mobile",item.getMobile());
+                    intent.putExtra("Merchant_Name",item.getMerchant_Name());
+                    intent.putExtra("Address",item.getAddress());
+                    intent.putExtra("ImgUrl",item.getUrl()+item.getFace_photo());
+                    intent.putExtra("Add_time",item.getAdd_time().substring(0,10));
+                    intent.putExtra("ID",item.getId());
                     context.startActivity(intent);
                 }
             });

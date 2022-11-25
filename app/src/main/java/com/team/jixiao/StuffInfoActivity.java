@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.team.jixiao.Adapter.LvStuffInfoAdapter;
 import com.team.jixiao.Entity.StuffInfo;
+import com.team.jixiao.utils.Constant;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -89,7 +90,7 @@ public class StuffInfoActivity extends AppCompatActivity {
 //                .build();
 
         Request request = new Request.Builder()
-                .url("http://47.92.214.113:8092/webapi/staff/sel_staff.ashx")
+                .url(Constant.WEB_SITE+Constant.STUFF_CHECK)
                 .build();
         Call call = client.newCall(request);
         call.enqueue(new Callback() {

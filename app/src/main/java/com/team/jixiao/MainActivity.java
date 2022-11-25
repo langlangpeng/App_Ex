@@ -1,13 +1,15 @@
 package com.team.jixiao;
 
-import android.content.Intent;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -18,6 +20,10 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.team.jixiao.Fragment.MyFragment1;
+import com.team.jixiao.Fragment.MyFragment2;
+import com.team.jixiao.Fragment.MyFragment3;
+import com.team.jixiao.Fragment.MyFragment4;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,19 +68,29 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
     }
 
     AMapLocationClient locationClient = null;
+
+    final int REQUEST_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE);
+//        }
+//
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+//        }
+
+
         role = getIntent().getIntExtra("role",-1);
         staff_info_id = getIntent().getIntExtra("staff_info_id",0);
         Log.e("Main_role:", String.valueOf(role));
         Log.e("Main_staff_info_id:", String.valueOf(staff_info_id));
-//        imagePath = getIntent().getStringExtra("imagePath");
-//        if (imagePath!=null){
-//            Log.d("TAG", imagePath);
-//        }
+
         AMapLocationClient.updatePrivacyShow(this, true, true);
         AMapLocationClient.updatePrivacyAgree(this, true);
 
@@ -165,17 +181,6 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
             Longitude = aMapLocation.getLongitude();
             Address = aMapLocation.getAddress();
 
-//            Log.e("Latitude", String.valueOf(Latitude));
-//            Log.e("Longitude", String.valueOf(Longitude));
-//            Log.e("Address", Address);
-
-//            postRequest();
-//            tvResult.setText("签到成功，签到经纬度：(" + aMapLocation.getLatitude() + "," + aMapLocation.getLongitude() + ")");
-//            Log.e("TAG", "onLocationChanged: "+aMapLocation.getLatitude() + "," + aMapLocation.getLongitude() );
-//            Intent intent = new Intent(SignInActivity.this,MainActivity.class);
-//            intent.putExtra("user_id",user_id);
-//            intent.putExtra("position_id",position_id);
-//            startActivity(intent);
         } else {
             //可以记录错误信息，或者根据错误错提示用户进行操作，Demo中只是打印日志
             Log.e("AMap", "签到定位失败，错误码：" + aMapLocation.getErrorCode() + ", " + aMapLocation.getLocationDetail());

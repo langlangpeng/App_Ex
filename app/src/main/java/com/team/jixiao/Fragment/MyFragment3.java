@@ -1,4 +1,4 @@
-package com.team.jixiao;
+package com.team.jixiao.Fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.team.jixiao.R;
 
 public class MyFragment3 extends Fragment {
     @Nullable

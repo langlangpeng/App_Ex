@@ -1,4 +1,4 @@
-package com.team.jixiao;
+package com.team.jixiao.Fragment;
 
 import static android.os.Looper.getMainLooper;
 
@@ -19,7 +19,11 @@ import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.team.jixiao.BusinessCheckActivity;
 import com.team.jixiao.Entity.StuffInfo;
+import com.team.jixiao.MainActivity;
+import com.team.jixiao.R;
+import com.team.jixiao.StuffInfoActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -81,13 +85,13 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.InStuff:
-                intent = new Intent(getActivity(),StuffInfoActivity.class);
+                intent = new Intent(getActivity(), StuffInfoActivity.class);
                 intent.putExtra("role",role);
                 intent.putExtra("staff_info_id",staff_info_id);
                 startActivity(intent);
                 break;
             case R.id.business_check:
-                intent = new Intent(getActivity(),BusinessCheckActivity.class);
+                intent = new Intent(getActivity(), BusinessCheckActivity.class);
                 intent.putExtra("role",role);
                 intent.putExtra("staff_info_id",staff_info_id);
                 startActivity(intent);

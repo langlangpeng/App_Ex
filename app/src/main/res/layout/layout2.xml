@@ -83,26 +83,10 @@
             android:textSize="@dimen/font_normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.209"
+            app:layout_constraintHorizontal_bias="0.348"
             app:layout_constraintStart_toEndOf="@+id/tv_name"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.023" />
-
-        <Button
-            android:id="@+id/btn_status"
-            android:visibility="invisible"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#f36c21"
-            android:text="工作状态"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.95"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.039" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -134,8 +118,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="KM
-" />
+                android:text="M " />
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -234,6 +217,20 @@
             app:layout_constraintEnd_toEndOf="@+id/imageBtn_sign"
             app:layout_constraintStart_toStartOf="@+id/imageBtn_sign"
             app:layout_constraintTop_toTopOf="@+id/imageBtn_sign" />
+
+        <TextView
+            android:id="@+id/tv_status2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="上班打卡"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_normal"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/imageBtn_sign"
+            app:layout_constraintEnd_toEndOf="@+id/imageBtn_sign"
+            app:layout_constraintStart_toStartOf="@+id/imageBtn_sign"
+            app:layout_constraintTop_toTopOf="@+id/imageBtn_sign"
+            app:layout_constraintVertical_bias="0.275" />
 
         <TextView
             android:id="@+id/tv_time"

@@ -21,6 +21,7 @@ import com.team.jixiao.Adapter.DetailMerChartAdapter;
 import com.team.jixiao.Adapter.LvStuffInfoAdapter;
 import com.team.jixiao.Entity.Detail_Merchant;
 import com.team.jixiao.Entity.StuffInfo;
+import com.team.jixiao.utils.Constant;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,6 +45,7 @@ import okhttp3.Response;
 
 public class BusinessCheckActivity extends AppCompatActivity {
     private int role = -1;
+
     private int staff_info_id = 0;
 
     Gson gson = new Gson();
@@ -102,7 +104,7 @@ public class BusinessCheckActivity extends AppCompatActivity {
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://47.92.214.113:8092/webapi/Merchant/browse_Merchant.ashx")
+                .url(Constant.WEB_SITE+Constant.BUSINESS_CHECK)
                 .post(body)
                 .build();
         Call call = client.newCall(request);
