@@ -88,6 +88,7 @@ public class PhotoActivity extends AppCompatActivity {
     private int sign = 0;
     String Address = "无";//地址
     String res = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,7 +144,6 @@ public class PhotoActivity extends AppCompatActivity {
             CommonUtils.showShortMsg(PhotoActivity.this,"无需请求动态权限");
         }
     }
-
 
     public void uploadImage(String imagePath){
         Log.d("uploadImage", imagePath);
@@ -212,8 +212,18 @@ public class PhotoActivity extends AppCompatActivity {
                 "yyyy_MM_dd_HH_mm_ss");
         String filename = timeStampFormat.format(new Date());
         Log.e("filename", filename);
+
+
+
+
+//        String path = Environment.getExternalStorageDirectory() + "/DCIM/CameraV2/";
+//        File file = new File(path);
+//        if (!file.exists()) {
+//            file.mkdir();
+//        }
         outputImagePath = new File(getExternalCacheDir(),
                 filename + ".jpg");
+
         Log.e("拍照获取", String.valueOf(outputImagePath));
         Intent takePhotoIntent = CameraUtils.getTakePhotoIntent(this, outputImagePath);
         // 开启一个带有返回值的Activity，请求码为TAKE_PHOTO
@@ -233,11 +243,7 @@ public class PhotoActivity extends AppCompatActivity {
                     Log.e("显示路径", imagePath);
                 }
                 break;
-
         }
-//        if (imagePath.isEmpty()){
-//            Toast.makeText(this, "图片上传失败，请检查手机权限是否开启", Toast.LENGTH_SHORT).show();
-//        }
         uploadImage(imagePath);
     }
 

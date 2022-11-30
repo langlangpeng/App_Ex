@@ -9,17 +9,21 @@
         <entry key="..\:/Android/jixiao/app/src/main/res/drawable/btn_bg_submit.xml" value="0.2585" />
         <entry key="..\:/Android/jixiao/app/src/main/res/drawable/ic_baseline_add_circle_40.xml" value="0.181" />
         <entry key="..\:/Android/jixiao/app/src/main/res/drawable/ic_baseline_chevron_left_24.xml" value="0.367" />
+        <entry key="..\:/Android/jixiao/app/src/main/res/drawable/ic_baseline_chevron_left_40.xml" value="0.244" />
         <entry key="..\:/Android/jixiao/app/src/main/res/drawable/ic_baseline_chevron_right_24.xml" value="0.307" />
         <entry key="..\:/Android/jixiao/app/src/main/res/drawable/ic_baseline_error_outline_24.xml" value="0.307" />
         <entry key="..\:/Android/jixiao/app/src/main/res/drawable/ic_baseline_help_outline_24.xml" value="0.307" />
         <entry key="..\:/Android/jixiao/app/src/main/res/drawable/ic_baseline_west_40.xml" value="0.181" />
         <entry key="..\:/Android/jixiao/app/src/main/res/drawable/ic_outline_lock_24.xml" value="0.307" />
         <entry key="..\:/Android/jixiao/app/src/main/res/drawable/input_bg.xml" value="0.181" />
+        <entry key="..\:/Android/jixiao/app/src/main/res/drawable/input_bg2.xml" value="0.293" />
         <entry key="..\:/Android/jixiao/app/src/main/res/drawable/rounded_rect_shape.xml" value="0.1" />
         <entry key="..\:/Android/jixiao/app/src/main/res/drawable/shadow.xml" value="0.275" />
         <entry key="..\:/Android/jixiao/app/src/main/res/layout/activity_business_check.xml" value="0.2828125" />
         <entry key="..\:/Android/jixiao/app/src/main/res/layout/activity_business_info.xml" value="0.33" />
+        <entry key="..\:/Android/jixiao/app/src/main/res/layout/activity_client_visit.xml" value="0.33" />
         <entry key="..\:/Android/jixiao/app/src/main/res/layout/activity_edit_info.xml" value="0.33" />
+        <entry key="..\:/Android/jixiao/app/src/main/res/layout/activity_emap.xml" value="0.2774690038477982" />
         <entry key="..\:/Android/jixiao/app/src/main/res/layout/activity_history.xml" value="0.30625" />
         <entry key="..\:/Android/jixiao/app/src/main/res/layout/activity_login.xml" value="0.36614583333333334" />
         <entry key="..\:/Android/jixiao/app/src/main/res/layout/activity_main.xml" value="0.25" />
@@ -38,6 +42,7 @@
         <entry key="..\:/Android/jixiao/app/src/main/res/layout/layout2.xml" value="0.33" />
         <entry key="..\:/Android/jixiao/app/src/main/res/layout/layout3.xml" value="0.2509619495510902" />
         <entry key="..\:/Android/jixiao/app/src/main/res/layout/layout4.xml" value="0.25" />
+        <entry key="..\:/Android/jixiao/app/src/main/res/layout/map_nfo_window.xml" value="0.2501068832834545" />
         <entry key="..\:/Android/jixiao/app/src/main/res/layout/stuffinfo_layout.xml" value="0.5804347826086956" />
         <entry key="..\:/Android/jixiao/app/src/main/res/menu/menu_main.xml" value="0.3338541666666667" />
       </map>

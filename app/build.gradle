@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.team.jixiao"
-        minSdk 24
+        minSdk 21
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -21,9 +21,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        disable 'GoogleAppIndexingWarning'
+        baseline file("lint-baseline.xml")
+
+        checkReleaseBuilds false
+        abortOnError false
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDir 'libs'
+        }
     }
 }
 
@@ -47,8 +59,8 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
-    //Google Material控件,以及迁移到AndroidX下一些控件的依赖
-    implementation 'com.google.android.material:material:1.2.0'
+//    //Google Material控件,以及迁移到AndroidX下一些控件的依赖
+//    implementation 'com.google.android.material:material:1.2.0'
 
     //OkHttp
     implementation "com.squareup.okhttp3:okhttp:4.10.0"
@@ -66,4 +78,7 @@ dependencies {
 
     //3D地图so及jar
     implementation 'com.amap.api:3dmap:9.1.0'
+
+    // Toast样式
+    implementation 'me.drakeet.support:toastcompat:1.1.0'
 }

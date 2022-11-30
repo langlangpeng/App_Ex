@@ -73,7 +73,6 @@ public class BusinessCheckActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initView();
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(System.currentTimeMillis());
 
         start_time = getTime(date);

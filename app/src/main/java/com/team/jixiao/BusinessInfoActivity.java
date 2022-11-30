@@ -119,9 +119,9 @@ public class BusinessInfoActivity extends AppCompatActivity {
                 .apply(requestOptions)
                 .into(iv_pic);
         disableRadioGroup(radioGroup_check);
-        if (status == 0){
+        if (status == 1){
             radioButton_yes.setChecked(true);
-        }else if (status == 1){
+        }else if (status == 2){
             radioButton_no.setChecked(true);
         }
     }

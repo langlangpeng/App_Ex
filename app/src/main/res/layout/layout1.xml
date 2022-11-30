@@ -21,9 +21,9 @@
             android:gravity="center">
 
             <LinearLayout
+                android:id="@+id/ClientVisit"
                 android:layout_width="@dimen/mian_linear_table"
                 android:layout_height="wrap_content"
-                android:onClick="InChat"
                 android:orientation="vertical"
                 android:padding="10dp">
 
@@ -45,7 +45,6 @@
             <LinearLayout
                 android:layout_width="@dimen/mian_linear_table"
                 android:layout_height="wrap_content"
-                android:onClick="InMyCustomer"
                 android:orientation="vertical"
                 android:padding="10dp">
 
@@ -67,7 +66,6 @@
             <LinearLayout
                 android:layout_width="@dimen/mian_linear_table"
                 android:layout_height="wrap_content"
-                android:onClick="Nothing"
                 android:orientation="vertical"
                 android:padding="10dp">
 
@@ -84,29 +82,28 @@
                     android:text="客户订单"
                     android:textSize="@dimen/font_small" />
             </LinearLayout>
-
             <LinearLayout
-                android:id="@+id/EMap"
+                android:id="@+id/business_check"
                 android:layout_width="@dimen/mian_linear_table"
                 android:layout_height="wrap_content"
-                android:onClick="Nothing"
+                android:visibility="visible"
                 android:orientation="vertical"
                 android:padding="10dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:background="@drawable/ic_baseline_map_40" />
-
-                <TextView
-                    android:id="@+id/image_03"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="电子围栏"
+                    android:background="@drawable/ic_baseline_khsh_search_24" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:text="商户审核"
                     android:textSize="@dimen/font_small" />
             </LinearLayout>
+
         </TableRow>
         <TableRow
             android:layout_width="match_parent"
@@ -134,28 +131,29 @@
                     android:text="员工信息"
                     android:textSize="@dimen/font_small" />
             </LinearLayout>
-
             <LinearLayout
-                android:id="@+id/business_check"
+                android:id="@+id/EMap"
                 android:layout_width="@dimen/mian_linear_table"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:onClick="EMap"
                 android:orientation="vertical"
                 android:padding="10dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@drawable/ic_baseline_khsh_search_24" />
-
-                <TextView
-                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:text="商户审核"
+                    android:background="@drawable/ic_baseline_map_40" />
+
+                <TextView
+                    android:id="@+id/image_03"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="电子围栏"
                     android:textSize="@dimen/font_small" />
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="@dimen/mian_linear_table"

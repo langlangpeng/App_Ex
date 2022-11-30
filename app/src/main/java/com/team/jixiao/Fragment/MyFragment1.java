@@ -1,12 +1,8 @@
 package com.team.jixiao.Fragment;
 
-import static android.os.Looper.getMainLooper;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,31 +13,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.team.jixiao.BusinessCheckActivity;
-import com.team.jixiao.Entity.StuffInfo;
+import com.team.jixiao.ClientVisitActivity;
+import com.team.jixiao.EMapActivity;
 import com.team.jixiao.MainActivity;
 import com.team.jixiao.R;
 import com.team.jixiao.StuffInfoActivity;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class MyFragment1 extends Fragment implements View.OnClickListener {
-    LinearLayout InStuff,EMap,business_check;
+    LinearLayout InStuff,EMap,business_check,ClientVisit;
     Intent intent;
     int role = -1;
     int staff_info_id = 0;
@@ -71,13 +53,15 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
         InStuff = view.findViewById(R.id.InStuff);
         EMap = view.findViewById(R.id.EMap);
         business_check = view.findViewById(R.id.business_check);
-
+        ClientVisit = view.findViewById(R.id.ClientVisit);
         if (role!=0){
             InStuff.setVisibility(View.INVISIBLE);
             EMap.setVisibility(View.INVISIBLE);
         }
         InStuff.setOnClickListener(this);
         business_check.setOnClickListener(this);
+        EMap.setOnClickListener(this);
+        ClientVisit.setOnClickListener(this);
         return view;
 }
 
@@ -92,6 +76,18 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
                 break;
             case R.id.business_check:
                 intent = new Intent(getActivity(), BusinessCheckActivity.class);
+                intent.putExtra("role",role);
+                intent.putExtra("staff_info_id",staff_info_id);
+                startActivity(intent);
+                break;
+            case R.id.EMap:
+                intent = new Intent(getActivity(), EMapActivity.class);
+                intent.putExtra("role",role);
+                intent.putExtra("staff_info_id",staff_info_id);
+                startActivity(intent);
+                break;
+            case R.id.ClientVisit:
+                intent = new Intent(getActivity(), ClientVisitActivity.class);
                 intent.putExtra("role",role);
                 intent.putExtra("staff_info_id",staff_info_id);
                 startActivity(intent);

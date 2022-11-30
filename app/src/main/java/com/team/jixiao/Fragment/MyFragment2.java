@@ -210,7 +210,6 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
             getRequest();
         } else {
             Log.e("AMap", "签到定位失败，错误码：" + aMapLocation.getErrorCode() + ", " + aMapLocation.getLocationDetail());
-
         }
     }
 
@@ -224,13 +223,13 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
                     Message msg = new Message();
                     msg.what = 1;
                     handler.sendMessage(msg);
-
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             } while (true);
         }
     }
+
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -242,6 +241,7 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
             return false;
         }
     });
+
     private void getRequest() {
         OkHttpClient client = new OkHttpClient();
         FormBody body = new FormBody.Builder()
@@ -305,7 +305,9 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
                                 if (sign==1){
                                     tv_on.setText(line.getAdd_time().substring(10,19));
                                 }
-                                tv_off.setText(line.getAdd_time().substring(10,19));
+                                if (sign!=1){
+                                    tv_off.setText(line.getAdd_time().substring(10,19));
+                                }
                             }
                             Log.e("sign状态", String.valueOf(sign));
 
@@ -314,7 +316,7 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
                             tv_distancen.setText(distancen);
                             Boolean is_coordinate = jsonObject1.getBoolean("is_coordinate");
                             if (is_coordinate==true){
-                                tv_status.setText("不在上班区域！");
+                                tv_status.setText("在上班区域认真哦！");
 
                                 imageBtn_sign.setBackgroundResource(R.drawable.bg_special_disease_circle2);
                             }else{
