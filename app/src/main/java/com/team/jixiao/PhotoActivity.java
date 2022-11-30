@@ -1,21 +1,35 @@
 package com.team.jixiao;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -40,6 +54,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -53,17 +68,6 @@ import okhttp3.Response;
 
 
 public class PhotoActivity extends AppCompatActivity {
-    private RxPermissions rxPermissions;
-
-    //是否拥有权限
-    private boolean hasPermissions = false;
-
-    //启动相机标识
-    public static final int TAKE_PHOTO = 1;
-
-    private String imagePath;
-
-    private File outputImagePath;
 
     Intent intent;
     private Handler mainHandler;
@@ -89,6 +93,16 @@ public class PhotoActivity extends AppCompatActivity {
     String Address = "无";//地址
     String res = "";
 
+    private static final int CAMERA_REQ = 1001;
+    private static final int VIDEO_REQ = 1002;
+
+    Intent openCamera;
+
+    MediaController mediaController;
+
+    File filePhotos;
+    Uri photoUri;
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,36 +128,137 @@ public class PhotoActivity extends AppCompatActivity {
         }
         mainHandler = new Handler(getMainLooper());
         pic = findViewById(R.id.pic);
-        //检查版本
-        checkVersion();
-        //取出缓存
-        imageUrl = SPUtils.getString("imageUrl",null,this);
-        takePhoto();
 
-
-//        mainHandler = new MainHandler();
-    }
-    private void checkVersion() {
-        //Android6.0及以上版本
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            //如果你是在Fragment中，则把this换成getActivity()
-            rxPermissions = new RxPermissions(this);
-            //权限请求
-            rxPermissions.request(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    .subscribe(granted -> {
-                        if (granted) {//申请成功
-                            CommonUtils.showShortMsg(PhotoActivity.this,"已获取权限");
-                            hasPermissions = true;
-                        } else {//申请失败
-                            CommonUtils.showShortMsg(PhotoActivity.this,"权限未开启");
-                            hasPermissions = false;
-                        }
-                    });
+        // cek permission camera
+        if (canAccessCamera()) {
+            // request permission
+            requestPermissions(
+                    new String[] { Manifest.permission.CAMERA },
+                    CAMERA_REQ
+            );
         } else {
-            //Android6.0以下
-            CommonUtils.showShortMsg(PhotoActivity.this,"无需请求动态权限");
+            takePictures();
+        }
+
+        if (ContextCompat.checkSelfPermission(
+                getApplicationContext(), Manifest.permission.CAMERA) ==
+                PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(
+                    PhotoActivity.this,
+                    new String[] { Manifest.permission.CAMERA },
+                    CAMERA_REQ
+            );
         }
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private boolean canAccessCamera() {
+        return (PackageManager.PERMISSION_GRANTED != checkSelfPermission(Manifest.permission.CAMERA));
+    }
+
+    private File createImages() throws IOException {
+        String timestamps = new SimpleDateFormat("yyyyMMdd", Locale.US).format(new Date());
+
+        String imgFiles = "JPEG_" + timestamps;
+
+        File storage = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        return File.createTempFile(
+                imgFiles,
+                ".jpeg",
+                storage
+        );
+    }
+
+    private void takePictures() {
+        if (ContextCompat.checkSelfPermission(
+                PhotoActivity.this, Manifest.permission.CAMERA) ==
+                PackageManager.PERMISSION_GRANTED) {
+            openCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+            if(openCamera.resolveActivity(getPackageManager()) != null) {
+                filePhotos = null;
+                try {
+                    filePhotos = createImages();
+                } catch (IOException IoEx) {
+                    Log.e("CAMS", IoEx.getMessage());
+                }
+
+                if(filePhotos != null) {
+                    photoUri = FileProvider.getUriForFile(
+                            this,
+                            getPackageName(),
+                            filePhotos
+                    );
+                    Log.e("filePhotos", "takePictures: "+filePhotos );
+                    Log.e("photoUri", String.valueOf(photoUri));
+                    openCamera.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                    PictureActivityResultLauncher.launch(openCamera);
+
+                }
+
+            }
+        }
+    }
+
+    ActivityResultLauncher<Intent> PictureActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    Uri fileUri = FileProvider.getUriForFile(
+                            PhotoActivity.this,
+                            getPackageName(),
+                            filePhotos);
+
+                    switch (result.getResultCode()) {
+                        case Activity.RESULT_CANCELED:
+                            deleteUnusedFile(fileUri);
+                            break;
+                        case Activity.RESULT_OK:
+                            Bitmap bitmap;
+                            Intent data = getIntent();
+                            try {
+                                if (data.hasExtra("data")) {
+                                    bitmap = (Bitmap) data.getExtras().get("data");
+                                } else {
+                                    photoUri = fileUri;
+                                    if (Build.VERSION.SDK_INT < 28) {
+                                        bitmap = MediaStore.Images.Media.getBitmap(
+                                                PhotoActivity.this.getContentResolver(), photoUri
+                                        );
+                                    } else {
+                                        ImageDecoder.Source source =
+                                                ImageDecoder.createSource(
+                                                        PhotoActivity.this.getContentResolver(), photoUri
+                                                );
+                                        bitmap = ImageDecoder.decodeBitmap(source);
+                                    }
+                                }
+                                //图片显示
+                                pic.setImageBitmap(bitmap);
+                                uploadImage(String.valueOf(filePhotos));
+                            } catch (IOException e) {
+                                Log.e("ERR_PIC", "Photo error : " + e.toString());
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+    );
+    private void deleteUnusedFile(Uri fileUri){
+        File fileDelete = new File(fileUri.getPath());
+        if(fileDelete.exists()) {
+            if(fileDelete.delete()) {
+                Log.i("TEMP", "Temporary file is deleted");
+            } else {
+                Log.i("TEMP", "Temporary file is not deleted");
+            }
+        }
+    }
+
 
     public void uploadImage(String imagePath){
         Log.d("uploadImage", imagePath);
@@ -162,92 +277,19 @@ public class PhotoActivity extends AppCompatActivity {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e("uploadImage——No", String.valueOf(e));
+                Log.e("uploadImage—No", String.valueOf(e));
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 res = response.body().string();
                 Log.e("res",res );
-                upsign();
+                UpSign();
             }
         });
     }
-    /**
-     * 通过图片路径显示图片
-     */
-    private void displayImage(String imagePath) {
-        if (!TextUtils.isEmpty(imagePath)) {
-            Log.e("图片缓存", imagePath);
-            //放入缓存
-            SPUtils.putString("imageUrl",imagePath,this);
 
-            //显示图片
-            Glide.with(this).load(imagePath).apply(requestOptions).into(pic);
-
-            //1
-            Log.e("压缩imagePath", imagePath);
-            //压缩图片
-            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-            if (bitmap != null){
-                orc_bitmap = CameraUtils.compression(bitmap);
-            }else {
-                orc_bitmap = null;
-            }
-            //转Base64
-            base64Pic = BitmapUtils.bitmapToBase64(orc_bitmap);
-
-        } else {
-            CommonUtils.showShortMsg(PhotoActivity.this,"图片获取失败");
-        }
-
-    }
-    private void takePhoto() {
-        if (!hasPermissions) {
-            CommonUtils.showShortMsg(PhotoActivity.this,"未获取到权限");
-            checkVersion();
-            return;
-        }
-        SimpleDateFormat timeStampFormat = new SimpleDateFormat(
-                "yyyy_MM_dd_HH_mm_ss");
-        String filename = timeStampFormat.format(new Date());
-        Log.e("filename", filename);
-
-
-
-
-//        String path = Environment.getExternalStorageDirectory() + "/DCIM/CameraV2/";
-//        File file = new File(path);
-//        if (!file.exists()) {
-//            file.mkdir();
-//        }
-        outputImagePath = new File(getExternalCacheDir(),
-                filename + ".jpg");
-
-        Log.e("拍照获取", String.valueOf(outputImagePath));
-        Intent takePhotoIntent = CameraUtils.getTakePhotoIntent(this, outputImagePath);
-        // 开启一个带有返回值的Activity，请求码为TAKE_PHOTO
-        startActivityForResult(takePhotoIntent, TAKE_PHOTO);
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            //拍照后返回
-            case TAKE_PHOTO:
-                if (resultCode == RESULT_OK) {
-                    imagePath = null;
-                    //显示图片 1
-                    imagePath = outputImagePath.getAbsolutePath();
-                    displayImage(outputImagePath.getAbsolutePath());
-                    Log.e("显示路径", imagePath);
-                }
-                break;
-        }
-        uploadImage(imagePath);
-    }
-
-    private void upsign() {
+    private void UpSign() {
         OkHttpClient client = new OkHttpClient();
 
         String s_Latitude = String.valueOf(Latitude);
@@ -286,5 +328,18 @@ public class PhotoActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,  int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == CAMERA_REQ) {
+            if(canAccessCamera()) {
+                Toast.makeText(PhotoActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+            } else {
+                takePictures();
+            }
+        }
     }
 }

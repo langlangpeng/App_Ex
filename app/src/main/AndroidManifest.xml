@@ -74,8 +74,8 @@
         </activity>
 
         <provider
+            android:authorities="com.team.jixiao"
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.team.jixiao.fileprovider"
             android:enabled="true"
             android:exported="false"
             android:grantUriPermissions="true">

@@ -302,10 +302,10 @@ public class MyFragment2 extends Fragment implements View.OnClickListener, AMapL
                                 tv_status2.setText(line.getType());
                                 Log.e("Sign", String.valueOf(line.getSign()));
                                 sign = line.getSign();
-                                if (sign==1){
+                                if (sign<1){
                                     tv_on.setText(line.getAdd_time().substring(10,19));
                                 }
-                                if (sign!=1){
+                                if (sign==2){
                                     tv_off.setText(line.getAdd_time().substring(10,19));
                                 }
                             }
