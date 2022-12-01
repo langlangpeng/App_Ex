@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.team.jixiao.BillActivity;
 import com.team.jixiao.BusinessCheckActivity;
 import com.team.jixiao.ClientVisitActivity;
 import com.team.jixiao.EMapActivity;
@@ -23,7 +24,7 @@ import com.team.jixiao.StuffInfoActivity;
 
 
 public class MyFragment1 extends Fragment implements View.OnClickListener {
-    LinearLayout InStuff,EMap,business_check,ClientVisit;
+    LinearLayout InStuff,EMap,business_check,ClientVisit,Bill;
     Intent intent;
     int role = -1;
     int staff_info_id = 0;
@@ -54,6 +55,8 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
         EMap = view.findViewById(R.id.EMap);
         business_check = view.findViewById(R.id.business_check);
         ClientVisit = view.findViewById(R.id.ClientVisit);
+        Bill = view.findViewById(R.id.Bill);
+
         if (role!=0){
             InStuff.setVisibility(View.INVISIBLE);
             EMap.setVisibility(View.INVISIBLE);
@@ -62,6 +65,7 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
         business_check.setOnClickListener(this);
         EMap.setOnClickListener(this);
         ClientVisit.setOnClickListener(this);
+        Bill.setOnClickListener(this);
         return view;
 }
 
@@ -88,6 +92,12 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
                 break;
             case R.id.ClientVisit:
                 intent = new Intent(getActivity(), ClientVisitActivity.class);
+                intent.putExtra("role",role);
+                intent.putExtra("staff_info_id",staff_info_id);
+                startActivity(intent);
+                break;
+            case R.id.Bill:
+                intent = new Intent(getActivity(), BillActivity.class);
                 intent.putExtra("role",role);
                 intent.putExtra("staff_info_id",staff_info_id);
                 startActivity(intent);

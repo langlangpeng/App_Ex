@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    tools:context=".BillActivity">
+
+    <Button
+        android:id="@+id/btn_billset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="128dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/btn_bg"
+        android:text="报单设置"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_billbrowse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/btn_bg"
+        android:text="报单浏览"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/btn_billset"
+        app:layout_constraintStart_toStartOf="@+id/btn_billset"
+        app:layout_constraintTop_toBottomOf="@+id/btn_billset" />
+
+    <Button
+        android:id="@+id/btn_valetbill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/btn_bg"
+        android:text="代客报单"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/btn_billbrowse"
+        app:layout_constraintHorizontal_bias="0.968"
+        app:layout_constraintStart_toStartOf="@+id/btn_billbrowse"
+        app:layout_constraintTop_toBottomOf="@+id/btn_billbrowse" />
+
+    <Button
+        android:id="@+id/btn_billmerchantset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/btn_bg"
+        android:text="报单商户设置"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/btn_valetbill"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_valetbill"
+        app:layout_constraintTop_toBottomOf="@+id/btn_valetbill" />
+</androidx.constraintlayout.widget.ConstraintLayout>
