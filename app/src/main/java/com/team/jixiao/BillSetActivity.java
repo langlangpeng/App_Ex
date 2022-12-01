@@ -28,6 +28,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,6 +104,9 @@ public class BillSetActivity extends AppCompatActivity {
     @BindView(R.id.iv_pic)
     ShapeableImageView iv_pic;
 
+    @BindView(R.id.type_add)
+    ImageButton type_add;
+
     //启动相机标识
     public static final int TAKE_PHOTO = 1;
     //启动相册标识
@@ -152,14 +156,21 @@ public class BillSetActivity extends AppCompatActivity {
     String type__name="";
 
     String urlSrc = "";
+
+    String content="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bill_set);
         ButterKnife.bind(this);
         checkVersion();
+        content = getIntent().getStringExtra("content");
+        if (content==null){
+            content = "";
+        }
+        type_name.setText(content);
     }
-    @OnClick({R.id.btn_sure,R.id.btn_submit,R.id.iv_pic})
+    @OnClick({R.id.btn_sure,R.id.btn_submit,R.id.iv_pic,R.id.type_add})
     public void onViewClick(View v){
         switch (v.getId()){
             case R.id.btn_sure:
@@ -274,7 +285,13 @@ public class BillSetActivity extends AppCompatActivity {
                         Toast.makeText(this, "已提交！", Toast.LENGTH_SHORT).show();
                     }
                 }
-
+                break;
+            case R.id.type_add:
+                String x = "";
+                x = type_name.getText().toString();
+                intent = new Intent(BillSetActivity.this,BillSetTypeAddActivity.class);
+                intent.putExtra("typename",x);
+                startActivity(intent);
                 break;
             default:
                 break;

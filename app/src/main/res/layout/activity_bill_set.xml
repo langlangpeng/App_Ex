@@ -94,13 +94,25 @@
                     android:text="规格名称"
                     android:textSize="@dimen/spacing_big"
                     android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/type_name"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:hint="请输入名称" />
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/type_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="请输入名称" />
+                    <ImageButton
+                        android:id="@+id/type_add"
+                        android:paddingLeft="@dimen/spacing_normal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:src="@drawable/ic_baseline_add_circle_outline_24"/>
+                </LinearLayout>
+
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -137,33 +149,30 @@
 
                     <EditText
                         android:id="@+id/type_no1"
-                        android:layout_width="wrap_content"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:background="@null"
                         android:gravity="center"
                         android:hint="No.1"
-                        android:inputType="number" />
+                        android:inputType="numberDecimal" />
 
                     <EditText
                         android:id="@+id/type_no2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:background="@null"
                         android:gravity="center"
                         android:hint="No.2"
-                        android:inputType="number" />
+                        android:inputType="numberDecimal" />
 
                     <EditText
                         android:id="@+id/type_no3"
-                        android:layout_width="wrap_content"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:background="@null"
                         android:gravity="center"
                         android:hint="No.3"
-                        android:inputType="number" />
+                        android:inputType="numberDecimal" />
 
                     <Button
                         android:id="@+id/btn_sure"
@@ -199,7 +208,7 @@
                             android:layout_height="wrap_content"
                             android:ems="10"
                             android:hint="请输入金额"
-                            android:inputType="number" />
+                            android:inputType="numberDecimal" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -222,7 +231,7 @@
                             android:layout_height="wrap_content"
                             android:ems="10"
                             android:hint="请输入金额"
-                            android:inputType="number" />
+                            android:inputType="numberDecimal" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -245,7 +254,7 @@
                             android:layout_height="wrap_content"
                             android:ems="10"
                             android:hint="请输入金额"
-                            android:inputType="number" />
+                            android:inputType="numberDecimal" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
     AMapLocationClient locationClient = null;
 
     final int REQUEST_CODE = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
