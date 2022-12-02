@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,7 +48,8 @@ public class BillSetTypeAddActivity extends AppCompatActivity {
     @BindView(R.id.type_add4)
     ImageButton type_add4;
 
-
+    @BindView(R.id.type_remove1)
+    ImageButton type_remove1;
     @BindView(R.id.type_remove2)
     ImageButton type_remove2;
     @BindView(R.id.type_remove3)
@@ -61,19 +63,26 @@ public class BillSetTypeAddActivity extends AppCompatActivity {
     Button btn_type_submit;
     String type_content = "";
     String typename = "";
+    Intent intent;
 
+    private int role = -1;
+    private int staff_info_id = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bill_set_type_add);
         ButterKnife.bind(this);
+        role = getIntent().getIntExtra("role", -1);
+        staff_info_id = getIntent().getIntExtra("staff_info_id", 0);
+        Log.e("BillSetTypeAddActivity_role:", String.valueOf(role));
+        Log.e("BillSetTypeAddActivity_info_id:", String.valueOf(staff_info_id));
         typename = getIntent().getStringExtra("typename");
         if (typename.isEmpty()){
             typename = "";
         }
         type_name1.setText(typename);
     }
-    @OnClick({R.id.type_add1,R.id.type_add2,R.id.type_add3,R.id.type_add4,R.id.type_remove2,R.id.type_remove3,R.id.type_remove4,R.id.type_remove5,R.id.btn_type_submit})
+    @OnClick({R.id.type_add1,R.id.type_add2,R.id.type_add3,R.id.type_add4,R.id.type_remove1,R.id.type_remove2,R.id.type_remove3,R.id.type_remove4,R.id.type_remove5,R.id.btn_type_submit})
     public void OnClickView(View view){
         switch (view.getId()){
             case R.id.type_add1:
@@ -88,6 +97,10 @@ public class BillSetTypeAddActivity extends AppCompatActivity {
             case R.id.type_add4:
                 l5.setVisibility(View.VISIBLE);
                 break;
+            case R.id.type_remove1:
+                intent = new Intent(BillSetTypeAddActivity.this,BillSetActivity.class);
+                startActivity(intent);
+                finish();
             case R.id.type_remove2:
                 type_name2.setText("");
                 l2.setVisibility(View.INVISIBLE);
@@ -118,10 +131,12 @@ public class BillSetTypeAddActivity extends AppCompatActivity {
                 if (!type_name5.getText().toString().trim().isEmpty()){
                     content = content + "|" + type_name5.getText().toString().trim();
                 }
-                Intent intent = new Intent(BillSetTypeAddActivity.this,BillSetActivity.class);
+                intent = new Intent(BillSetTypeAddActivity.this,BillSetActivity.class);
                 intent.putExtra("content",content);
+                intent.putExtra("staff_info_id",staff_info_id);
+                intent.putExtra("role",role);
                 startActivity(intent);
-                Toast.makeText(this, content, Toast.LENGTH_SHORT).show();
+                finish();
                 break;
             default:
                 break;

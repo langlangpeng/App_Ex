@@ -29,11 +29,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -74,6 +72,8 @@ public class BillSetActivity extends AppCompatActivity {
     EditText et_item_name;
     @BindView(R.id.type_name)
     EditText type_name;
+    @BindView(R.id.good_unit)
+    EditText good_unit;
 
     @BindView(R.id.type_no1)
     EditText type_no1;
@@ -107,6 +107,11 @@ public class BillSetActivity extends AppCompatActivity {
     @BindView(R.id.type_add)
     ImageButton type_add;
 
+    @BindView(R.id.tv_return1)
+    TextView tv_return;
+
+    private int role = -1;
+    private int staff_info_id = 0;
     //启动相机标识
     public static final int TAKE_PHOTO = 1;
     //启动相册标识
@@ -154,72 +159,82 @@ public class BillSetActivity extends AppCompatActivity {
     String item__no="";
     String item__name="";
     String type__name="";
+    String good__unit="";
 
     String urlSrc = "";
 
     String content="";
+
+    String msg = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bill_set);
         ButterKnife.bind(this);
         checkVersion();
+        role = getIntent().getIntExtra("role", -1);
+        staff_info_id = getIntent().getIntExtra("staff_info_id", 0);
+        Log.e("BillSetActivity_role:", String.valueOf(role));
+        Log.e("BillSetActivity_info_id:", String.valueOf(staff_info_id));
         content = getIntent().getStringExtra("content");
         if (content==null){
             content = "";
         }
         type_name.setText(content);
     }
-    @OnClick({R.id.btn_sure,R.id.btn_submit,R.id.iv_pic,R.id.type_add})
+    @OnClick({R.id.btn_sure,R.id.btn_submit,R.id.iv_pic,R.id.type_add,R.id.tv_return1})
     public void onViewClick(View v){
         switch (v.getId()){
             case R.id.btn_sure:
                 if (type_no1.getText().toString().isEmpty()){
-                    type_no1.setText("0");
+                    type_no1.setText("1");
                 }
                 if (type_no2.getText().toString().isEmpty()){
-                    type_no2.setText("0");
+                    type_no2.setText("1");
                 }
                 if (type_no3.getText().toString().isEmpty()){
-                    type_no3.setText("0");
+                    type_no3.setText("1");
                 }
                 int no1  = Integer.parseInt(type_no1.getText().toString().trim());
                 int no2  = Integer.parseInt(type_no2.getText().toString().trim());
                 int no3  = Integer.parseInt(type_no3.getText().toString().trim());
                 Log.e("数字", String.valueOf(no1)+","+String.valueOf(no2)+","+String.valueOf(no3)+",");
-                if (no1<=5){
-                    type_number_no1.setText("0-5");
-                }else if (no1>5&&no1<=10){
-                    type_number_no1.setText("6-10");
-                }else {
+                if (no1<=no2&&no2<no3){
+                    if (no1<=5){
+                        type_number_no1.setText("1-5");
+                    }else if (no1>5&&no1<=10){
+                        type_number_no1.setText("6-10");
+                    }else {
 //                    type_number_no1.setText(type_no1.getText().toString());
-                    type_number_no1.setText("11+");
-                }
+                        type_number_no1.setText("11+");
+                    }
 
-                if (no2<=5){
-                    type_number_no2.setText("0-5");
-                }else if (no2>5&&no2<=10){
-                    type_number_no2.setText("6-10");
-                }else {
+                    if (no2<=5){
+                        type_number_no2.setText("1-5");
+                    }else if (no2>5&&no2<=10){
+                        type_number_no2.setText("6-10");
+                    }else {
 //                    type_number_no2.setText(type_no2.getText().toString());
-                    type_number_no2.setText("11+");
-                }
+                        type_number_no2.setText("11+");
+                    }
 
-                if (no3<=5){
-                    type_number_no3.setText("0-5");
-                }else if (no3>5&&no3<=10){
-                    type_number_no3.setText("6-10");
-                }else {
+                    if (no3<=5){
+                        type_number_no3.setText("1-5");
+                    }else if (no3>5&&no3<=10){
+                        type_number_no3.setText("6-10");
+                    }else {
 //                    type_number_no3.setText(type_no3.getText().toString());
-                    type_number_no3.setText("11+");
+                        type_number_no3.setText("11+");
+                    }
+                    number_no1 = String.valueOf(no1);
+                    number_no2 = String.valueOf(no2);
+                    number_no3 = String.valueOf(no3);
+                }else{
+                    Toast.makeText(this, "参数填写不合规", Toast.LENGTH_SHORT).show();
                 }
-                number_no1 = String.valueOf(no1);
-                number_no2 = String.valueOf(no2);
-                number_no3 = String.valueOf(no3);
                 break;
             case R.id.iv_pic:
 //                Toast.makeText(this, "点击", Toast.LENGTH_SHORT).show();
-
                 bottomSheetDialog = new BottomSheetDialog(this);
                 bottomView = getLayoutInflater().inflate(R.layout.dialog_bottom, null);
                 bottomSheetDialog.setContentView(bottomView);
@@ -261,28 +276,40 @@ public class BillSetActivity extends AppCompatActivity {
                 item__no = et_item_no.getText().toString().trim();
                 item__name = et_item_name.getText().toString().trim();
                 type__name = type_name.getText().toString().trim();
+                good__unit = good_unit.getText().toString().trim();
 
                 m1 = type_amount_no1.getText().toString().trim();
                 m2 = type_amount_no2.getText().toString().trim();
                 m3 = type_amount_no3.getText().toString().trim();
 
-                if (item__no.isEmpty()||item__name.isEmpty()||type__name.isEmpty()){
+                Double d1 = Double.valueOf(m1);
+                Double d2 = Double.valueOf(m2);
+                Double d3 = Double.valueOf(m3);
+                Log.e(m1, String.valueOf(d1));
+                Log.e(m2, String.valueOf(d2));
+                Log.e(m3, String.valueOf(d3));
+                if (item__no.isEmpty()||item__name.isEmpty()||type__name.isEmpty()||good__unit.isEmpty()){
                     Toast.makeText(this, "请检查是否填写完整！", Toast.LENGTH_SHORT).show();
                 }else{
                     if (m1.isEmpty()&&m2.isEmpty()&&m3.isEmpty()){
                         Toast.makeText(this, "金额不能为空！", Toast.LENGTH_SHORT).show();
                     }else if (m1.substring(0,1).equals("0")||m2.substring(0,1).equals("0")||m3.substring(0,1).equals("0")){
-                        Toast.makeText(this, "金额不能输入为0！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "金额不能入为0！", Toast.LENGTH_SHORT).show();
+                    }else if ((d1 < d2) && (d2 < d3)){
+                        Toast.makeText(this, "金额不能超过前一位的额度！", Toast.LENGTH_SHORT).show();
                     }else{
                         if (imagePath!=null){
                             x=imagePath;
+                            System.out.println(x);
                         }else if (filePhotos!=null){
                             x= String.valueOf(filePhotos);
+                            System.out.println(x);
                         }else if (x.isEmpty()){
                             Toast.makeText(this, "还未选择图片", Toast.LENGTH_SHORT).show();
                         }
                         uploadImage(x);
                         Toast.makeText(this, "已提交！", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
@@ -291,8 +318,16 @@ public class BillSetActivity extends AppCompatActivity {
                 x = type_name.getText().toString();
                 intent = new Intent(BillSetActivity.this,BillSetTypeAddActivity.class);
                 intent.putExtra("typename",x);
+                intent.putExtra("staff_info_id",staff_info_id);
+                intent.putExtra("role",role);
                 startActivity(intent);
                 break;
+            case R.id.tv_return1:
+                intent = new Intent(BillSetActivity.this,BillActivity.class);
+                intent.putExtra("staff_info_id",staff_info_id);
+                intent.putExtra("role",role);
+                startActivity(intent);
+                finish();
             default:
                 break;
         }
@@ -349,6 +384,7 @@ public class BillSetActivity extends AppCompatActivity {
                 .add("pl_num3",number_no3)
                 .add("pl_price3",m3)
                 .add("picture_url",urlSrc)
+                .add("unit",good__unit)
                 .build();
 
         Request request = new Request.Builder()
@@ -367,6 +403,12 @@ public class BillSetActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 String res = response.body().string();//转字符串
                 Log.d("BillSetActivity_msg", "onResponse: "+res);
+                try {
+                    JSONObject jsonObject = new JSONObject(res);
+                    msg = jsonObject.optString("msg");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 //                intent = new Intent(PhotoActivity.this,MainActivity.class);
 //                intent.putExtra("role",role);
 //                intent.putExtra("staff_info_id",staff_info_id);

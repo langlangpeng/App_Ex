@@ -22,4 +22,5 @@
     <dimen name="spacing_border">12dp</dimen>
 
     <dimen name="mian_linear_table">250px</dimen>
+    <dimen name="navigation_bar_h">50dp</dimen>
 </resources>

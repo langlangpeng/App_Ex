@@ -3,7 +3,6 @@ package com.team.jixiao.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +58,7 @@ public class DetailMerChartAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (convertView == null){
-            convertView = LayoutInflater.from(context).inflate(R.layout.check_layout,null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.lv_check,null);
             viewHolder = new ViewHolder();
 
             viewHolder.tv_Merchant_Name = convertView.findViewById(R.id.tv_Merchant_Name);

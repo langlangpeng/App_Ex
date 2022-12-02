@@ -4,6 +4,7 @@ pluginManagement {
         google()
         mavenCentral()
         jcenter()
+        maven { url "https://www.jitpack.io" }
     }
 }
 dependencyResolutionManagement {
@@ -12,6 +13,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         jcenter()
+        maven { url "https://www.jitpack.io" }
     }
 }
 rootProject.name = "绩效考勤"

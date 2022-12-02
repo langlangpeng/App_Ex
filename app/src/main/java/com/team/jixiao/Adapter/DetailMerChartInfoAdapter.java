@@ -1,22 +1,13 @@
 package com.team.jixiao.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.team.jixiao.BusinessInfoActivity;
-import com.team.jixiao.Entity.Detail_Merchant;
 import com.team.jixiao.Entity.Detail_Merchart_Data;
-import com.team.jixiao.MapActivity;
 import com.team.jixiao.R;
 
 import java.util.List;
@@ -55,7 +46,7 @@ public class DetailMerChartInfoAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (convertView == null){
-            convertView = LayoutInflater.from(context).inflate(R.layout.detail_merchant_layout,null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.lv_detail_merchant,null);
             viewHolder = new ViewHolder();
 
             viewHolder.tv_content = convertView.findViewById(R.id.tv_content);

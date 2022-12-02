@@ -66,4 +66,19 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/btn_valetbill"
         app:layout_constraintTop_toBottomOf="@+id/btn_valetbill" />
+
+    <Button
+        android:id="@+id/btn_return"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="280dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/btn_bg"
+        android:text="返回"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/btn_valetbill"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_valetbill"
+        app:layout_constraintTop_toBottomOf="@+id/btn_billmerchantset" />
 </androidx.constraintlayout.widget.ConstraintLayout>

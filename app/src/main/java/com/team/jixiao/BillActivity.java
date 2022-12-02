@@ -23,6 +23,8 @@ public class BillActivity extends AppCompatActivity {
     Button btn_valetbill;
     @BindView(R.id.btn_billmerchantset)
     Button btn_billmerchantset;
+    @BindView(R.id.btn_return)
+    Button btn_return;
 
     Intent intent;
     @Override
@@ -36,21 +38,35 @@ public class BillActivity extends AppCompatActivity {
         Log.e("BillActivity_info_id:", String.valueOf(staff_info_id));
 
     }
-    @OnClick({R.id.btn_billset,R.id.btn_billbrowse,R.id.btn_valetbill,R.id.btn_billmerchantset})
+    @OnClick({R.id.btn_billset,R.id.btn_billbrowse,R.id.btn_valetbill,R.id.btn_billmerchantset,R.id.btn_return})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.btn_billset:
                     intent = new Intent(BillActivity.this,BillSetActivity.class);
+                    intent.putExtra("staff_info_id",staff_info_id);
+                    intent.putExtra("role",role);
                     startActivity(intent);
                 break;
             case R.id.btn_billbrowse:
-
+                    intent = new Intent(BillActivity.this,BillBrowseActivity.class);
+                    intent.putExtra("staff_info_id",staff_info_id);
+                    intent.putExtra("role",role);
+                    startActivity(intent);
                 break;
             case R.id.btn_valetbill:
-
+                intent = new Intent(BillActivity.this,ValetBillActivity.class);
+                intent.putExtra("staff_info_id",staff_info_id);
+                intent.putExtra("role",role);
+                startActivity(intent);
                 break;
             case R.id.btn_billmerchantset:
 
+                break;
+            case R.id.btn_return:
+                intent = new Intent(BillActivity.this,MainActivity.class);
+                intent.putExtra("staff_info_id",staff_info_id);
+                intent.putExtra("role",role);
+                startActivity(intent);
                 break;
             default:
                 break;

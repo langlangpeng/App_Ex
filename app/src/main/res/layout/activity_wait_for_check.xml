@@ -16,7 +16,7 @@
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="@dimen/navigation_bar_h"
             android:layout_gravity="center"
             android:background="#2a5caa"
             android:elevation="8dp"
@@ -200,10 +200,10 @@
 
                 <ImageView
                     android:id="@+id/iv_pic"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:onClick="changeAvatar"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:src="@drawable/logo"/>
+                    android:src="@drawable/logo" />
             </LinearLayout>
         </LinearLayout>
 

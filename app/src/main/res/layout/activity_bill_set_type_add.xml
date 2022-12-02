@@ -54,7 +54,7 @@
                 android:layout_gravity="center"
                 android:background="@null"
                 android:src="@drawable/ic_baseline_remove_circle_outline_24"
-                android:visibility="invisible" />
+                android:visibility="visible" />
         </LinearLayout>
 
         <LinearLayout

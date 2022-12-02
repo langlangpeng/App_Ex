@@ -15,9 +15,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/navigation_bar_h"
                 android:background="#2a5caa"
                 android:orientation="vertical">
 
@@ -36,6 +37,19 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_return1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
+                    android:text="返回"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.509" />
             </androidx.constraintlayout.widget.ConstraintLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -116,6 +130,35 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/spacing_biger"
+                android:paddingTop="@dimen/spacing_normal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/spacing_normal"
+                    android:text="单位（KG、G之类的）"
+                    android:textSize="@dimen/spacing_big"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/good_unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="请输入单位" />
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/spacing_normal"
                 android:paddingLeft="@dimen/spacing_biger"
@@ -149,16 +192,18 @@
 
                     <EditText
                         android:id="@+id/type_no1"
-                        android:layout_width="100dp"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:gravity="center"
                         android:hint="No.1"
-                        android:inputType="numberDecimal" />
+                        android:focusable="false"
+                        android:inputType="numberDecimal"
+                        android:text="1" />
 
                     <EditText
                         android:id="@+id/type_no2"
-                        android:layout_width="100dp"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:gravity="center"
@@ -167,7 +212,7 @@
 
                     <EditText
                         android:id="@+id/type_no3"
-                        android:layout_width="100dp"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:gravity="center"
@@ -176,6 +221,7 @@
 
                     <Button
                         android:id="@+id/btn_sure"
+                        android:layout_weight="1"
                         android:background="@drawable/btn_bg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

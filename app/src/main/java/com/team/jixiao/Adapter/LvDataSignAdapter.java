@@ -58,7 +58,7 @@ public class LvDataSignAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (convertView == null){
-            convertView = LayoutInflater.from(context).inflate(R.layout.historyinfo_layout,null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.lv_historyinfo,null);
             viewHolder = new ViewHolder();
 
             viewHolder.tv_name = convertView.findViewById(R.id.tv_name);

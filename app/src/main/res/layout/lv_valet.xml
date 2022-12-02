@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ct_face_photo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.051"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_wallpaper_100" />
+
+    <TextView
+        android:id="@+id/ct_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="ct_name"
+        app:layout_constraintStart_toEndOf="@+id/ct_face_photo"
+        app:layout_constraintTop_toTopOf="@+id/ct_face_photo" />
+
+    <TextView
+        android:id="@+id/ct_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:text="ct_phone"
+        app:layout_constraintStart_toEndOf="@+id/ct_face_photo"
+        app:layout_constraintTop_toBottomOf="@+id/ct_name" />
+
+    <TextView
+        android:id="@+id/createtime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:text="createtime"
+        app:layout_constraintStart_toEndOf="@+id/ct_face_photo"
+        app:layout_constraintTop_toBottomOf="@+id/ct_address" />
+
+    <TextView
+        android:id="@+id/ct_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:text="ct_address"
+        app:layout_constraintStart_toEndOf="@+id/ct_face_photo"
+        app:layout_constraintTop_toBottomOf="@+id/ct_phone" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="@dimen/navigation_bar_h"
         android:background="#2a5caa"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"

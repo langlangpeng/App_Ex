@@ -53,7 +53,7 @@ public class LvStuffInfoAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (convertView == null){
-            convertView = LayoutInflater.from(context).inflate(R.layout.stuffinfo_layout,null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.lv_stuffinfo,null);
             viewHolder = new ViewHolder();
 
             viewHolder.tv_username = convertView.findViewById(R.id.tv_username);
